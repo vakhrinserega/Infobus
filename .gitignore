@@ -17,3 +17,6 @@ Pods/
 # Swift Package Manager
 .swiftpm/
 .build/
+
+# local cleanup helper (safe to delete)
+.git_stray_lockfiles_to_delete/

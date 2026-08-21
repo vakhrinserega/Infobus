@@ -2,20 +2,39 @@
 //  ContentView.swift
 //  Infobus
 //
-//  Created by Mag on 21.08.2026.
+//  Root tab bar — five sections of the app.
 //
 
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            RoutesListView()
+                .tabItem {
+                    Label("Маршруты", systemImage: "list.bullet")
+                }
+
+            MapView()
+                .tabItem {
+                    Label("Карта", systemImage: "map")
+                }
+
+            SearchView()
+                .tabItem {
+                    Label("Поиск", systemImage: "magnifyingglass")
+                }
+
+            NotificationsView()
+                .tabItem {
+                    Label("Уведомления", systemImage: "bell")
+                }
+
+            SettingsView()
+                .tabItem {
+                    Label("Настройки", systemImage: "gearshape")
+                }
         }
-        .padding()
     }
 }
 
