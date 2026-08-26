@@ -56,6 +56,17 @@
         }
       }
     },
+    "Готово": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Готово"
+          }
+        }
+      }
+    },
     "Другие языки появятся здесь по мере добавления переводов.": {
       "extractionState": "manual",
       "localizations": {
@@ -111,17 +122,6 @@
         }
       }
     },
-    "Мнемосхема маршрута появится здесь": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мнемосхема маршрута появится здесь"
-          }
-        }
-      }
-    },
     "Написать в поддержку": {
       "extractionState": "manual",
       "localizations": {
@@ -129,6 +129,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Написать в поддержку"
+          }
+        }
+      }
+    },
+    "Направление": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Направление"
           }
         }
       }
@@ -162,6 +173,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Не удалось загрузить маршруты"
+          }
+        }
+      }
+    },
+    "Не удалось загрузить остановки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось загрузить остановки"
+          }
+        }
+      }
+    },
+    "Нет данных о прибытии для этой остановки.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нет данных о прибытии для этой остановки."
           }
         }
       }
@@ -200,6 +233,17 @@
         }
       }
     },
+    "Обратно": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обратно"
+          }
+        }
+      }
+    },
     "Определяет, какие маршруты, остановки и автобусы показываются в приложении.": {
       "extractionState": "manual",
       "localizations": {
@@ -218,6 +262,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Определять моё местоположение"
+          }
+        }
+      }
+    },
+    "Остановки не найдены": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Остановки не найдены"
           }
         }
       }
@@ -339,6 +394,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Тема"
+          }
+        }
+      }
+    },
+    "Туда": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Туда"
           }
         }
       }

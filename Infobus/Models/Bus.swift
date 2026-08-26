@@ -17,8 +17,15 @@ import Foundation
 import CoreLocation
 
 struct Bus: Decodable, Identifiable {
-    /// Buses carry no stable server-side id; the device IMEI is the closest thing to one.
-    var id: String { imei ?? name }
+    /// Buses carry no stable server-side id; the device IMEI is the closest
+    /// thing to one. Falls back further to a coordinate string (not just
+    /// `name`, which decodes to "" when missing) so two buses that are both
+    /// missing imei AND name don't collide onto the same id in SwiftUI lists.
+    var id: String {
+        if let imei, !imei.isEmpty { return imei }
+        if !name.isEmpty { return name }
+        return "\(lat),\(lon)"
+    }
 
     let name: String
     let direction: Int?

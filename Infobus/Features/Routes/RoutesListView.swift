@@ -19,7 +19,11 @@ struct RoutesListView: View {
             content
                 .navigationTitle("Маршруты")
                 .navigationDestination(for: Route.self) { route in
-                    RouteDetailView(route: route)
+                    if let city = cityStore.selectedCity, let country = cityStore.selectedCountry {
+                        RouteDetailView(route: route, city: city, country: country)
+                    } else {
+                        ContentUnavailableView("Город не выбран", systemImage: "mappin.slash")
+                    }
                 }
         }
         .task(id: cityStore.selectionKey) {
