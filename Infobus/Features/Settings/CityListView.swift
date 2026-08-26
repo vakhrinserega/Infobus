@@ -43,6 +43,10 @@ struct CityListView: View {
                                     .foregroundStyle(.tint)
                             }
                         }
+                        // Without this, a .plain-styled Button only registers taps
+                        // where something is actually drawn — the empty Spacer()
+                        // between the name and the checkmark wouldn't respond at all.
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .foregroundStyle(.primary)
