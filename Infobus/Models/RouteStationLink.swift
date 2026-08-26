@@ -13,7 +13,7 @@
 
 import Foundation
 
-struct RouteStationLink: Decodable {
+struct RouteStationLink: Codable {
     let routeId: Int
     let stationId: Int
     let sequenceNumber: Int

@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct InfobusApp: App {
+    @StateObject private var cityStore = SelectedCityStore()
+    @StateObject private var settingsStore = AppSettingsStore()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(cityStore)
+                .environmentObject(settingsStore)
         }
     }
 }

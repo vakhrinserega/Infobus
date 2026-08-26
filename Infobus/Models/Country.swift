@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Country: Decodable, Identifiable, Hashable {
+struct Country: Codable, Identifiable, Hashable {
     let id: Int
     let code: String
     let name: String

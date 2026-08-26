@@ -11,7 +11,7 @@
 
 import Foundation
 
-struct City: Decodable, Identifiable, Hashable {
+struct City: Codable, Identifiable, Hashable {
     let id: Int
     let name: String
     let serviceURL: String

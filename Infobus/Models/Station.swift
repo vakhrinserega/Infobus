@@ -12,7 +12,7 @@
 import Foundation
 import CoreLocation
 
-struct Station: Decodable, Identifiable, Hashable {
+struct Station: Codable, Identifiable, Hashable {
     let id: Int
     let name: String
     let stationDescription: String?

@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-struct Route: Decodable, Identifiable, Hashable {
+struct Route: Codable, Identifiable, Hashable {
     let id: Int
     let cityId: Int
     let busreportRouteId: Int
