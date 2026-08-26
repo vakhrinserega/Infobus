@@ -62,7 +62,12 @@ final class RouteDetailViewModel: ObservableObject {
         do {
             let data = try await cache.refreshIfNeeded(for: city, in: country)
             stationsById = Dictionary(uniqueKeysWithValues: data.stations.map { ($0.id, $0) })
-            linksForRoute = data.links.filter { $0.routeId == route.id }
+            // RouteStationLink.routeId, Bus's URL routeId, and Prediction.routeId all
+            // key off the live-tracking subsystem's id ("busreportRouteId" on the wire),
+            // NOT the routes CMS's own primary id — confirmed against both the old
+            // Objective-C client and live production data. Route.id alone matched
+            // nothing here, which is exactly the "no stops found" bug this fixes.
+            linksForRoute = data.links.filter { $0.routeId == route.busreportRouteId }
             stopsState = .loaded(buildStops())
             await loadPredictions()
         } catch {
@@ -97,7 +102,7 @@ final class RouteDetailViewModel: ObservableObject {
         guard case .loaded(let stops) = stopsState else { return }
         let token = UUID()
         predictionsRequestToken = token
-        let routeId = route.id
+        let routeId = route.busreportRouteId
         let apiClient = self.apiClient
         let city = self.city
 
@@ -137,7 +142,7 @@ final class RouteDetailViewModel: ObservableObject {
     }
 
     private func refreshBuses() async {
-        guard let fetched = try? await apiClient.fetchBuses(for: city, routeId: route.id) else { return }
+        guard let fetched = try? await apiClient.fetchBuses(for: city, routeId: route.busreportRouteId) else { return }
         let polyline = route.coordinates
         buses = fetched.compactMap { bus -> PositionedBus? in
             guard let projected = RouteGeometry.project(bus.coordinate, onto: polyline) else { return nil }
