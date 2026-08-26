@@ -25,6 +25,15 @@ final class SelectedCityStore: ObservableObject {
 
     var hasSelection: Bool { selectedCity != nil }
 
+    /// A single Equatable value identifying the current selection, combining
+    /// both ids — city ids are only unique *within* a country, so the city id
+    /// alone can't tell two different cities apart. Meant for `.task(id:)` in
+    /// views that need to reload when the selection changes.
+    var selectionKey: String? {
+        guard let country = selectedCountry, let city = selectedCity else { return nil }
+        return "\(country.id)-\(city.id)"
+    }
+
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         self.selectedCountry = Self.load(Country.self, key: Keys.country, from: defaults)

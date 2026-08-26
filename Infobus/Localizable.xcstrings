@@ -12,6 +12,17 @@
         }
       }
     },
+    "Выберите город на вкладке «Настройки».": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выберите город на вкладке «Настройки»."
+          }
+        }
+      }
+    },
     "Геолокация отключена в системе": {
       "extractionState": "manual",
       "localizations": {
@@ -30,6 +41,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Город"
+          }
+        }
+      }
+    },
+    "Город не выбран": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Город не выбран"
           }
         }
       }
@@ -78,6 +100,28 @@
         }
       }
     },
+    "Маршруты не найдены": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Маршруты не найдены"
+          }
+        }
+      }
+    },
+    "Мнемосхема маршрута появится здесь": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мнемосхема маршрута появится здесь"
+          }
+        }
+      }
+    },
     "Написать в поддержку": {
       "extractionState": "manual",
       "localizations": {
@@ -111,6 +155,28 @@
         }
       }
     },
+    "Не удалось загрузить маршруты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось загрузить маршруты"
+          }
+        }
+      }
+    },
+    "Номер или название маршрута": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Номер или название маршрута"
+          }
+        }
+      }
+    },
     "Обновить": {
       "extractionState": "manual",
       "localizations": {
@@ -122,6 +188,7 @@
         }
       }
     },
+    "Обновлено %@": {},
     "Обновляем маршруты и остановки…": {
       "extractionState": "manual",
       "localizations": {

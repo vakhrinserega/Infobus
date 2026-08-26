@@ -13,13 +13,6 @@ import Combine
 
 @MainActor
 final class SettingsViewModel: ObservableObject {
-    enum LoadState<Value> {
-        case idle
-        case loading
-        case loaded(Value)
-        case failed(String)
-    }
-
     @Published var countriesState: LoadState<[Country]> = .idle
     @Published var citiesState: LoadState<[City]> = .idle
 
