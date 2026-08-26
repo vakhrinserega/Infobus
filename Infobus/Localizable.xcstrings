@@ -1,0 +1,314 @@
+{
+  "sourceLanguage": "ru",
+  "strings": {
+    "Версия": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Версия"
+          }
+        }
+      }
+    },
+    "Геолокация отключена в системе": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Геолокация отключена в системе"
+          }
+        }
+      }
+    },
+    "Город": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Город"
+          }
+        }
+      }
+    },
+    "Другие языки появятся здесь по мере добавления переводов.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Другие языки появятся здесь по мере добавления переводов."
+          }
+        }
+      }
+    },
+    "Используется, чтобы показать вас на карте и подсветить вашу остановку на схеме маршрута.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Используется, чтобы показать вас на карте и подсветить вашу остановку на схеме маршрута."
+          }
+        }
+      }
+    },
+    "Карта": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Карта"
+          }
+        }
+      }
+    },
+    "Маршруты": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Маршруты"
+          }
+        }
+      }
+    },
+    "Написать в поддержку": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Написать в поддержку"
+          }
+        }
+      }
+    },
+    "Настройки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Настройки"
+          }
+        }
+      }
+    },
+    "Не выбран": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не выбран"
+          }
+        }
+      }
+    },
+    "Обновить": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обновить"
+          }
+        }
+      }
+    },
+    "Обновляем маршруты и остановки…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обновляем маршруты и остановки…"
+          }
+        }
+      }
+    },
+    "Определяет, какие маршруты, остановки и автобусы показываются в приложении.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Определяет, какие маршруты, остановки и автобусы показываются в приложении."
+          }
+        }
+      }
+    },
+    "Определять моё местоположение": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Определять моё местоположение"
+          }
+        }
+      }
+    },
+    "Открыть Настройки": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыть Настройки"
+          }
+        }
+      }
+    },
+    "Отмечать автобусы с пандусом": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отмечать автобусы с пандусом"
+          }
+        }
+      }
+    },
+    "Повторить": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Повторить"
+          }
+        }
+      }
+    },
+    "Поиск": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Поиск"
+          }
+        }
+      }
+    },
+    "Показываются все автобусы; при включении оборудованные пандусом отмечаются отдельным значком.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показываются все автобусы; при включении оборудованные пандусом отмечаются отдельным значком."
+          }
+        }
+      }
+    },
+    "Русский": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Русский"
+          }
+        }
+      }
+    },
+    "Светлая": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Светлая"
+          }
+        }
+      }
+    },
+    "Системная": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Системная"
+          }
+        }
+      }
+    },
+    "Системный": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Системный"
+          }
+        }
+      }
+    },
+    "Страна": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Страна"
+          }
+        }
+      }
+    },
+    "Тема": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тема"
+          }
+        }
+      }
+    },
+    "Тёмная": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тёмная"
+          }
+        }
+      }
+    },
+    "Уведомления": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Уведомления"
+          }
+        }
+      }
+    },
+    "Язык": {
+      "extractionState": "manual",
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Язык"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -2,80 +2,174 @@
 //  SettingsView.swift
 //  Infobus
 //
-//  City selection, accessible-bus preferences, location preference, and app
-//  info. Refresh-interval settings are deliberately absent — buses poll on a
-//  fixed short interval while a live screen is visible, and route/station
-//  data refreshes on city selection and stale cold launch — neither is
+//  City selection (with cache status + manual refresh), accessible-bus
+//  preference, location preference (with a way out if iOS itself denied
+//  permission), appearance override, language override, and app info.
+//  Refresh-interval settings are deliberately absent — buses poll on a fixed
+//  short interval while a live screen is visible, and route/station data
+//  refreshes on city selection and stale cold launch — neither is
 //  user-configurable, per the discussion with the product owner.
 //
 
 import SwiftUI
+import UIKit
 
 struct SettingsView: View {
     @EnvironmentObject private var cityStore: SelectedCityStore
     @EnvironmentObject private var settings: AppSettingsStore
     @StateObject private var viewModel = SettingsViewModel()
+    @StateObject private var locationAuthorization = LocationAuthorizationObserver()
 
     var body: some View {
         NavigationStack {
             Form {
-                Section {
-                    NavigationLink {
-                        CitySelectionView(viewModel: viewModel)
-                    } label: {
-                        HStack {
-                            Text("Город")
-                            Spacer()
-                            Text(cityStore.selectedCity?.name ?? "Не выбран")
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    if viewModel.isRefreshingCityData {
-                        HStack {
-                            ProgressView()
-                            Text("Обновляем маршруты и остановки…")
-                                .foregroundStyle(.secondary)
-                        }
-                    } else if let error = viewModel.cityDataRefreshError {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(error)
-                                .foregroundStyle(.secondary)
-                            Button("Повторить") {
-                                viewModel.retryCityDataRefresh()
-                            }
-                        }
-                    }
-                } footer: {
-                    Text("Определяет, какие маршруты, остановки и автобусы показываются в приложении.")
+                citySection
+                accessibleBusesSection
+                locationSection
+                appearanceSection
+                languageSection
+                aboutSection
+            }
+            .navigationTitle("Настройки")
+            .task {
+                if let city = cityStore.selectedCity, let country = cityStore.selectedCountry {
+                    await viewModel.loadCityDataInfo(city: city, country: country)
                 }
-
-                Section {
-                    Toggle("Отмечать автобусы с пандусом", isOn: $settings.highlightAccessibleBuses)
-                } footer: {
-                    Text("Показываются все автобусы; при включении оборудованные пандусом отмечаются отдельным значком.")
+                // Covers first launch, where `useMyLocation` already defaults to true and
+                // .onChange below never fires since there's no on->on transition to catch.
+                if settings.useMyLocation {
+                    locationAuthorization.requestIfNeeded()
                 }
+            }
+        }
+    }
 
-                Section {
-                    Toggle("Определять моё местоположение", isOn: $settings.useMyLocation)
-                } footer: {
-                    Text("Используется, чтобы показать вас на карте и подсветить вашу остановку на схеме маршрута.")
-                }
+    // MARK: - Sections
 
-                Section {
-                    if let url = feedbackMailURL {
-                        Link("Написать в поддержку", destination: url)
-                    }
-                    HStack {
-                        Text("Версия")
-                        Spacer()
-                        Text(appVersionString)
+    private var citySection: some View {
+        Section {
+            NavigationLink {
+                CitySelectionView(viewModel: viewModel)
+            } label: {
+                HStack {
+                    Text("Город")
+                    Spacer()
+                    if let city = cityStore.selectedCity {
+                        Text(city.name)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("Не выбран")
                             .foregroundStyle(.secondary)
                     }
                 }
             }
-            .navigationTitle("Настройки")
+
+            if viewModel.isRefreshingCityData {
+                HStack {
+                    ProgressView()
+                    Text("Обновляем маршруты и остановки…")
+                        .foregroundStyle(.secondary)
+                }
+            } else if let error = viewModel.cityDataRefreshError {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(error)
+                        .foregroundStyle(.secondary)
+                    Button("Повторить") {
+                        viewModel.retryCityDataRefresh()
+                    }
+                }
+            } else if cityStore.selectedCity != nil {
+                HStack {
+                    if let lastUpdated = viewModel.cityDataLastUpdated {
+                        Text("Обновлено \(lastUpdated.formatted(.relative(presentation: .named)))")
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Button("Обновить", action: refreshCurrentCity)
+                }
+            }
+        } footer: {
+            Text("Определяет, какие маршруты, остановки и автобусы показываются в приложении.")
         }
     }
+
+    private var accessibleBusesSection: some View {
+        Section {
+            Toggle("Отмечать автобусы с пандусом", isOn: $settings.highlightAccessibleBuses)
+        } footer: {
+            Text("Показываются все автобусы; при включении оборудованные пандусом отмечаются отдельным значком.")
+        }
+    }
+
+    private var locationSection: some View {
+        Section {
+            Toggle("Определять моё местоположение", isOn: $settings.useMyLocation)
+                .onChange(of: settings.useMyLocation) { _, isOn in
+                    if isOn { locationAuthorization.requestIfNeeded() }
+                }
+
+            if settings.useMyLocation && locationAuthorization.isDenied {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Геолокация отключена в системе")
+                        .foregroundStyle(.secondary)
+                    Button("Открыть Настройки", action: openSystemSettings)
+                }
+            }
+        } footer: {
+            Text("Используется, чтобы показать вас на карте и подсветить вашу остановку на схеме маршрута.")
+        }
+    }
+
+    private var appearanceSection: some View {
+        Section {
+            Picker("Тема", selection: $settings.theme) {
+                ForEach(AppTheme.allCases) { theme in
+                    Text(theme.displayName).tag(theme)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+    }
+
+    private var languageSection: some View {
+        Section {
+            Picker("Язык", selection: $settings.language) {
+                ForEach(AppLanguage.allCases) { language in
+                    Text(language.displayName).tag(language)
+                }
+            }
+        } footer: {
+            Text("Другие языки появятся здесь по мере добавления переводов.")
+        }
+    }
+
+    private var aboutSection: some View {
+        Section {
+            if let url = feedbackMailURL {
+                Link("Написать в поддержку", destination: url)
+            }
+            HStack {
+                Text("Версия")
+                Spacer()
+                Text(appVersionString)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    // MARK: - Actions
+
+    private func refreshCurrentCity() {
+        guard let city = cityStore.selectedCity, let country = cityStore.selectedCountry else { return }
+        viewModel.manualRefresh(city: city, country: country)
+    }
+
+    private func openSystemSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
+    }
+
+    // MARK: - Formatting
 
     private var feedbackMailURL: URL? {
         URL(string: "mailto:support@infobus.kz")

@@ -17,6 +17,8 @@ struct InfobusApp: App {
             ContentView()
                 .environmentObject(cityStore)
                 .environmentObject(settingsStore)
+                .preferredColorScheme(settingsStore.theme.colorScheme)
+                .environment(\.locale, settingsStore.language.localeOverride ?? .autoupdatingCurrent)
         }
     }
 }

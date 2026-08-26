@@ -4,11 +4,11 @@
 //
 //  Drives the city picker (countries, then cities for the chosen country) and
 //  kicks off a background city-data refresh the moment a new city is picked —
-//  "refresh on selection", not on a timer.
+//  "refresh on selection", not on a timer. Also exposes a manual refresh for
+//  the "Обновить" button and the cached data's last-updated time.
 //
 
 import Foundation
-import Combine
 
 @MainActor
 final class SettingsViewModel: ObservableObject {
@@ -22,8 +22,8 @@ final class SettingsViewModel: ObservableObject {
     @Published var countriesState: LoadState<[Country]> = .idle
     @Published var citiesState: LoadState<[City]> = .idle
 
-    /// True while a just-picked city's routes/stations/links are being fetched,
-    /// so the picker can show that something is happening instead of the
+    /// True while a city's routes/stations/links are being fetched, so the
+    /// picker/Settings can show that something is happening instead of the
     /// refresh running silently off-screen.
     @Published var isRefreshingCityData = false
 
@@ -31,6 +31,10 @@ final class SettingsViewModel: ObservableObject {
     /// of leaving the user with a persisted city selection and silently stale
     /// (or entirely missing) route/station data.
     @Published var cityDataRefreshError: String?
+
+    /// When the current city's cached routes/stations/links were last fetched,
+    /// for display next to the manual "Обновить" button.
+    @Published var cityDataLastUpdated: Date?
 
     private let apiClient: InfobusAPIClient
     private let cache: CityDataCache
@@ -87,6 +91,19 @@ final class SettingsViewModel: ObservableObject {
         refreshCityData(city: city, country: country)
     }
 
+    /// The "Обновить" button in Settings — always hits the network, unlike
+    /// `selectCity`, which only refreshes when the city actually changed.
+    func manualRefresh(city: City, country: Country) {
+        refreshCityData(city: city, country: country)
+    }
+
+    /// Reads whatever is already cached for `city` (no network call) so
+    /// Settings can show a last-updated time as soon as it appears, before
+    /// any refresh this session.
+    func loadCityDataInfo(city: City, country: Country) async {
+        cityDataLastUpdated = await cache.cachedData(for: city, in: country)?.lastUpdated
+    }
+
     private func refreshCityData(city: City, country: Country) {
         pendingRefreshCity = city
         pendingRefreshCountry = country
@@ -95,7 +112,8 @@ final class SettingsViewModel: ObservableObject {
         Task {
             defer { isRefreshingCityData = false }
             do {
-                _ = try await cache.forceRefresh(for: city, in: country)
+                let data = try await cache.forceRefresh(for: city, in: country)
+                cityDataLastUpdated = data.lastUpdated
             } catch {
                 cityDataRefreshError = "Не удалось обновить маршруты и остановки для этого города"
             }
