@@ -16,22 +16,16 @@ import Combine
 final class AppSettingsStore: ObservableObject {
     private enum Keys {
         static let highlightAccessibleBuses = "settings.highlightAccessibleBuses"
-        static let filterAccessibleBusesOnly = "settings.filterAccessibleBusesOnly"
         static let useMyLocation = "settings.useMyLocation"
     }
 
     private let defaults: UserDefaults
 
-    /// Marks wheelchair/adapted buses with a distinct badge wherever buses are
-    /// shown. On by default — this makes them visible, it doesn't restrict anything.
+    /// Marks ramp-equipped buses with a distinct badge wherever buses are shown.
+    /// All buses always show — this only adds a badge, it never hides anything.
+    /// On by default.
     @Published var highlightAccessibleBuses: Bool {
         didSet { defaults.set(highlightAccessibleBuses, forKey: Keys.highlightAccessibleBuses) }
-    }
-
-    /// Hides non-adapted buses on Map/mnemoscheme entirely. Off by default —
-    /// a situational filter, independent of the always-available highlight above.
-    @Published var filterAccessibleBusesOnly: Bool {
-        didSet { defaults.set(filterAccessibleBusesOnly, forKey: Keys.filterAccessibleBusesOnly) }
     }
 
     /// Governs whether the app uses the device's location to show "you are here"
@@ -44,7 +38,6 @@ final class AppSettingsStore: ObservableObject {
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         self.highlightAccessibleBuses = defaults.object(forKey: Keys.highlightAccessibleBuses) as? Bool ?? true
-        self.filterAccessibleBusesOnly = defaults.object(forKey: Keys.filterAccessibleBusesOnly) as? Bool ?? false
         self.useMyLocation = defaults.object(forKey: Keys.useMyLocation) as? Bool ?? true
     }
 }

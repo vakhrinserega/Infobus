@@ -50,12 +50,9 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Toggle("Отмечать доступные автобусы", isOn: $settings.highlightAccessibleBuses)
-                    Toggle("Показывать только доступные", isOn: $settings.filterAccessibleBusesOnly)
-                } header: {
-                    Text("Автобусы для людей с инвалидностью")
+                    Toggle("Отмечать автобусы с пандусом", isOn: $settings.highlightAccessibleBuses)
                 } footer: {
-                    Text("Отмеченные автобусы оборудованы для пассажиров с инвалидностью.")
+                    Text("Показываются все автобусы; при включении оборудованные пандусом отмечаются отдельным значком.")
                 }
 
                 Section {
