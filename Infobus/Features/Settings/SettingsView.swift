@@ -19,9 +19,10 @@ struct SettingsView: View {
     @EnvironmentObject private var settings: AppSettingsStore
     @StateObject private var viewModel = SettingsViewModel()
     @StateObject private var locationAuthorization = LocationAuthorizationObserver()
+    @State private var navigationPath = NavigationPath()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             Form {
                 citySection
                 accessibleBusesSection
@@ -31,6 +32,19 @@ struct SettingsView: View {
                 aboutSection
             }
             .navigationTitle("Настройки")
+            .navigationDestination(for: SettingsRoute.self) { route in
+                switch route {
+                case .citySelection:
+                    CitySelectionView(viewModel: viewModel)
+                case .cityList(let country):
+                    CityListView(country: country, viewModel: viewModel) {
+                        // Clearing the whole path (not just popping one level) is
+                        // what lets picking a city land straight back on Settings,
+                        // regardless of how many levels deep the picker pushed.
+                        navigationPath = NavigationPath()
+                    }
+                }
+            }
             .task {
                 if let city = cityStore.selectedCity, let country = cityStore.selectedCountry {
                     await viewModel.loadCityDataInfo(city: city, country: country)
@@ -48,9 +62,7 @@ struct SettingsView: View {
 
     private var citySection: some View {
         Section {
-            NavigationLink {
-                CitySelectionView(viewModel: viewModel)
-            } label: {
+            NavigationLink(value: SettingsRoute.citySelection) {
                 HStack {
                     Text("Город")
                     Spacer()
