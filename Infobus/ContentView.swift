@@ -2,7 +2,8 @@
 //  ContentView.swift
 //  Infobus
 //
-//  Root tab bar — five sections of the app.
+//  Root tab bar — five sections of the app. Карта comes first since it's
+//  the primary, full-screen view of live buses.
 //
 
 import SwiftUI
@@ -10,14 +11,14 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView {
-            RoutesListView()
-                .tabItem {
-                    Label("Маршруты", systemImage: "list.bullet")
-                }
-
             MapView()
                 .tabItem {
                     Label("Карта", systemImage: "map")
+                }
+
+            RoutesListView()
+                .tabItem {
+                    Label("Маршруты", systemImage: "list.bullet")
                 }
 
             SearchView()

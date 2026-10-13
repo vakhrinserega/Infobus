@@ -2,15 +2,15 @@
 //  RouteDetailView.swift
 //  Infobus
 //
-//  The mnemoscheme: a vertical schematic line of stations for one route,
-//  with a direction toggle, live buses positioned between the stations
-//  they're currently between, inline arrival estimates where data exists,
-//  and the rider's own nearest station highlighted with an auto-return
-//  scroll behavior.
+//  A single route's live map: its line, station pins, and buses snapped
+//  onto the line (or left at their raw GPS fix when too far off). Station
+//  pins only show once zoomed in close enough, and bus icons shrink at a
+//  distance — both driven by the map's live camera distance — so a
+//  zoomed-out view isn't cluttered with pins nobody can usefully tap yet.
 //
 
 import SwiftUI
-import CoreLocation
+import MapKit
 
 struct RouteDetailView: View {
     let route: Route
@@ -18,63 +18,63 @@ struct RouteDetailView: View {
     let country: Country
 
     @EnvironmentObject private var settings: AppSettingsStore
-    @StateObject private var viewModel: RouteDetailViewModel
+    @StateObject private var track: RouteMapTrack
     @StateObject private var locationProvider = UserLocationProvider()
-    @State private var selectedStop: RouteStop?
-    @State private var returnToCurrentTask: Task<Void, Never>?
+    @State private var cameraPosition: MapCameraPosition = .automatic
+    @State private var cameraDistance: Double = 3000
+    @State private var currentCamera: MapCamera?
+    /// Fallback center for `zoom(by:)` — see the identical property in
+    /// MapView.swift for why this exists (the same hard `guard let
+    /// currentCamera` bug was here too, just not the one reported).
+    @State private var lastKnownCenter: CLLocationCoordinate2D?
 
-    private let rowHeight: CGFloat = 76
-    private let trackX: CGFloat = 28
+    /// Station pins only render once the camera is closer than this (meters).
+    /// Kept generous on purpose — stations should show up while still fairly
+    /// zoomed out rather than only after zooming in a lot.
+    private let stationVisibleMaxDistance: Double = 8000
+
+    /// Below this camera distance, station pins step up to their larger
+    /// size — "close" zoom, as opposed to the "medium" zoom range between
+    /// this and `stationVisibleMaxDistance`, where they stay at their
+    /// normal size.
+    private let stationCloseZoomDistance: Double = 2000
 
     init(route: Route, city: City, country: Country) {
         self.route = route
         self.city = city
         self.country = country
-        _viewModel = StateObject(wrappedValue: RouteDetailViewModel(route: route, city: city, country: country))
+        _track = StateObject(wrappedValue: RouteMapTrack(route: route, city: city, country: country))
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            Picker("Направление", selection: $viewModel.direction) {
-                Text(RouteDirection.forward.displayName).tag(RouteDirection.forward)
-                Text(RouteDirection.backward.displayName).tag(RouteDirection.backward)
+        content
+            .navigationTitle(route.routeNumber)
+            .navigationBarTitleDisplayMode(.inline)
+            .task {
+                if let region = RouteGeometry.boundingRegion(for: route.coordinates) {
+                    cameraPosition = .region(region)
+                    lastKnownCenter = region.center
+                }
+                await track.loadStops()
             }
-            .pickerStyle(.segmented)
-            .padding()
-            .onChange(of: viewModel.direction) { _, _ in
-                viewModel.directionChanged()
+            .onAppear {
+                track.startPolling()
+                if settings.useMyLocation { locationProvider.start() }
             }
-
-            content
-        }
-        .navigationTitle(route.routeNumber)
-        .navigationBarTitleDisplayMode(.inline)
-        .task { await viewModel.loadStops() }
-        .onAppear {
-            viewModel.startPolling()
-            if settings.useMyLocation { locationProvider.start() }
-        }
-        .onDisappear {
-            viewModel.stopPolling()
-            locationProvider.stop()
-            returnToCurrentTask?.cancel()
-        }
-        .onReceive(locationProvider.$currentCoordinate) { newValue in
-            if let coordinate = newValue {
-                viewModel.updateCurrentStation(from: coordinate)
+            .onDisappear {
+                track.stopPolling()
+                locationProvider.stop()
             }
-        }
-        .sheet(item: $selectedStop) { stop in
-            StationPredictionSheet(
-                stop: stop,
-                predictions: viewModel.predictionsByStationId[stop.station.id] ?? []
-            )
-        }
+            .onReceive(locationProvider.$currentCoordinate) { coordinate in
+                if let coordinate {
+                    track.updateCurrentStation(from: coordinate)
+                }
+            }
     }
 
     @ViewBuilder
     private var content: some View {
-        switch viewModel.stopsState {
+        switch track.stopsState {
         case .idle, .loading:
             ProgressView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -82,160 +82,155 @@ struct RouteDetailView: View {
             ContentUnavailableView {
                 Label("Не удалось загрузить остановки", systemImage: "exclamationmark.triangle")
             } description: {
-                Text(message)
+                // `message` is a plain `String` from RouteMapTrack —
+                // `Text(String)` never looks it up in Localizable.xcstrings.
+                Text(LocalizedStringKey(message))
             } actions: {
-                Button("Повторить") { Task { await viewModel.loadStops() } }
+                Button("Повторить") { Task { await track.loadStops() } }
             }
-        case .loaded(let stops):
-            if stops.isEmpty {
+        case .loaded(let stations):
+            if stations.isEmpty {
                 ContentUnavailableView("Остановки не найдены", systemImage: "mappin.slash")
             } else {
-                mnemoscheme(stops: stops)
+                map(stations: stations)
             }
         }
     }
 
-    private func mnemoscheme(stops: [RouteStop]) -> some View {
-        let totalHeight = CGFloat(stops.count) * rowHeight
-        let placed = viewModel.placedBuses(for: stops)
+    /// Stations and buses are added to the map in two separate passes
+    /// (not interleaved) so every bus annotation is declared after every
+    /// station annotation — buses are meant to always sit on top, since a
+    /// bus that happens to be sitting right at a stop should never be
+    /// hidden behind that stop's pin.
+    private func map(stations: [Station]) -> some View {
+        Map(position: $cameraPosition) {
+            // A darker casing under the colored line keeps the route legible
+            // against whatever the map's own basemap colors happen to be
+            // underneath it (roads, parks, water), the same way transit maps
+            // give their lines a light outline.
+            MapPolyline(coordinates: route.coordinates)
+                .stroke(Color.black.opacity(0.25), lineWidth: 6)
+            MapPolyline(coordinates: route.coordinates)
+                .stroke(Color.accentColor, lineWidth: 4)
 
-        return ScrollViewReader { proxy in
-            ScrollView {
-                ZStack(alignment: .topLeading) {
-                    Rectangle()
-                        .fill(Color.secondary.opacity(0.3))
-                        .frame(width: 3, height: totalHeight)
-                        .offset(x: trackX - 1.5, y: 0)
-
-                    VStack(spacing: 0) {
-                        ForEach(stops) { stop in
-                            StationRow(
-                                stop: stop,
-                                isCurrent: stop.id == viewModel.currentStationId,
-                                predictions: viewModel.predictionsByStationId[stop.station.id] ?? [],
-                                trackX: trackX
-                            )
-                            .frame(height: rowHeight)
-                            .contentShape(Rectangle())
-                            .onTapGesture { selectedStop = stop }
-                            .id(stop.id)
-                        }
+            if cameraDistance < stationVisibleMaxDistance {
+                ForEach(stations) { station in
+                    Annotation(station.name, coordinate: station.coordinate, anchor: .bottom) {
+                        StationAnnotationView(
+                            station: station,
+                            isCurrent: station.id == track.currentStationId,
+                            fetch: { await track.fetchPredictions(stationId: station.id) },
+                            // This screen only ever draws its own single route, so
+                            // there's no SelectedRoutesStore to consult — a
+                            // prediction row for THIS route gets the same accent
+                            // color as the line on screen, everything else falls
+                            // back to StationPredictionSheet's own neutral gray.
+                            colorForRoute: { routeId in routeId == route.busreportRouteId ? Color.accentColor : nil }
+                        )
+                        .scaleEffect(stationScale)
+                        .zIndex(0)
                     }
+                }
+            }
 
-                    ForEach(placed) { placedBus in
-                        BusMarker(isOffRoute: placedBus.isOffRoute)
-                            .position(x: trackX, y: yPosition(beforeIndex: placedBus.beforeIndex, t: placedBus.t))
-                    }
-                }
-                .frame(height: totalHeight)
-                .padding(.vertical, 12)
-            }
-            .simultaneousGesture(
-                DragGesture(minimumDistance: 1)
-                    .onChanged { _ in scheduleReturnToCurrentStation(proxy: proxy) }
-            )
-            .onChange(of: viewModel.currentStationId) { _, newId in
-                // Only auto-follow live position updates when the rider isn't
-                // mid-interaction — while returnToCurrentTask is pending (set by
-                // a drag below), a live update here would fight a manual scroll
-                // instead of waiting out the 2s idle window like it's supposed to.
-                guard let newId, returnToCurrentTask == nil else { return }
-                withAnimation { proxy.scrollTo(newId, anchor: .bottom) }
-            }
-            .onAppear {
-                if let id = viewModel.currentStationId {
-                    proxy.scrollTo(id, anchor: .bottom)
+            ForEach(track.buses) { busPin in
+                Annotation("", coordinate: busPin.coordinate, anchor: .center) {
+                    BusAnnotationView(
+                        bus: busPin.bus,
+                        isOffRoute: busPin.isOffRoute,
+                        bearing: busPin.bearing,
+                        routeColor: .accentColor,
+                        occupancyPercent: busPin.bus.filling
+                    )
+                    .scaleEffect(busScale)
+                    .zIndex(1)
                 }
             }
+
+            UserAnnotation()
+        }
+        .mapControls {
+            MapCompass()
+            MapScaleView()
+            MapUserLocationButton()
+        }
+        .onMapCameraChange(frequency: .continuous) { context in
+            cameraDistance = context.camera.distance
+            currentCamera = context.camera
+        }
+        .overlay(alignment: .bottomTrailing) {
+            zoomControls
         }
     }
 
-    private func yPosition(beforeIndex: Int, t: Double) -> CGFloat {
-        let centerBefore = CGFloat(beforeIndex) * rowHeight + rowHeight / 2
-        let centerAfter = CGFloat(beforeIndex + 1) * rowHeight + rowHeight / 2
-        return centerBefore + (centerAfter - centerBefore) * CGFloat(t)
+    /// Smaller the farther out the camera is — roughly full-size within
+    /// ~800m, shrinking down to about 65% by 6km out.
+    private var busScale: CGFloat {
+        let minDistance = 800.0
+        let maxDistance = 6000.0
+        let clamped = min(max(cameraDistance, minDistance), maxDistance)
+        let t = (clamped - minDistance) / (maxDistance - minDistance)
+        return 1.0 - 0.35 * CGFloat(t)
     }
 
-    /// Any manual drag restarts a 2-second countdown; if it elapses
-    /// uninterrupted, snap back to whatever the rider's current station is
-    /// AT THAT TIME (read fresh, not the value captured when the drag
-    /// started — the live position may well have moved on during the wait).
-    private func scheduleReturnToCurrentStation(proxy: ScrollViewProxy) {
-        returnToCurrentTask?.cancel()
-        returnToCurrentTask = Task {
-            try? await Task.sleep(nanoseconds: 2_000_000_000)
-            guard !Task.isCancelled else { return }
-            if let currentId = viewModel.currentStationId {
-                withAnimation { proxy.scrollTo(currentId, anchor: .bottom) }
+    /// 1.0 through "medium" zoom (their current, unchanged size), stepping
+    /// up to 1.4 once the camera is closer than `stationCloseZoomDistance`.
+    private var stationScale: CGFloat {
+        cameraDistance < stationCloseZoomDistance ? 1.4 : 1.0
+    }
+
+    // MARK: - Zoom controls
+
+    /// A manual +/- zoom control, like the ones on other map apps — MapKit's
+    /// own `.mapControls` doesn't offer one, only pinch-to-zoom, the compass,
+    /// scale, and the user-location button.
+    private var zoomControls: some View {
+        VStack(spacing: 0) {
+            Button {
+                zoom(by: 0.5)
+            } label: {
+                Image(systemName: "plus")
+                    .font(.system(size: 16, weight: .semibold))
+                    .frame(width: 36, height: 36)
             }
-            returnToCurrentTask = nil
+            Divider().frame(width: 24)
+            Button {
+                zoom(by: 2)
+            } label: {
+                Image(systemName: "minus")
+                    .font(.system(size: 16, weight: .semibold))
+                    .frame(width: 36, height: 36)
+            }
         }
+        .buttonStyle(.plain)
+        .foregroundStyle(.primary)
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
+        .padding(.trailing, 12)
+        .padding(.bottom, 24)
     }
-}
 
-private struct StationRow: View {
-    let stop: RouteStop
-    let isCurrent: Bool
-    let predictions: [Prediction]
-    let trackX: CGFloat
-
-    var body: some View {
-        HStack(alignment: .center, spacing: 12) {
-            Circle()
-                .fill(isCurrent ? Color.accentColor : Color.secondary)
-                .frame(width: isCurrent ? 16 : 10, height: isCurrent ? 16 : 10)
-                .frame(width: trackX * 2, alignment: .center)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(stop.station.name)
-                    .font(isCurrent ? .headline : .body)
-                    .lineLimit(1)
-                if let etaText {
-                    Text(etaText)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            Spacer()
+    private func zoom(by factor: Double) {
+        guard let center = currentCamera?.centerCoordinate ?? lastKnownCenter else { return }
+        let newDistance = min(max(cameraDistance * factor, 200), 200_000)
+        let newCamera = MapCamera(
+            centerCoordinate: center,
+            distance: newDistance,
+            heading: currentCamera?.heading ?? 0,
+            pitch: currentCamera?.pitch ?? 0
+        )
+        withAnimation(.easeInOut(duration: 0.2)) {
+            cameraPosition = .camera(newCamera)
         }
-        // Trailing-only padding: the row must start flush at x = 0 so the
-        // circle's frame (width trackX * 2, starting at 0) centers exactly on
-        // trackX — the same x the track line and bus markers use. A leading
-        // inset here would shift the dot right of the line/markers, which is
-        // exactly the bug a review caught in an earlier draft of this row.
-        .padding(.trailing)
-    }
-
-    private var etaText: String? {
-        let values = predictions.map(\.prediction).sorted()
-        guard !values.isEmpty else { return nil }
-        let formatted = values.prefix(2).map { "\(Int($0.rounded())) мин" }.joined(separator: ", ")
-        return "≈ \(formatted)"
-    }
-}
-
-private struct BusMarker: View {
-    let isOffRoute: Bool
-
-    var body: some View {
-        Image(systemName: "bus.fill")
-            .font(.caption)
-            .foregroundStyle(.white)
-            .padding(6)
-            .background(Circle().fill(isOffRoute ? Color.gray : Color.orange))
-            .overlay {
-                if isOffRoute {
-                    Circle().strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [3, 2]))
-                        .foregroundStyle(.gray)
-                }
-            }
+        currentCamera = newCamera
+        cameraDistance = newDistance
+        lastKnownCenter = center
     }
 }
 
 #Preview {
     NavigationStack {
         RouteDetailView(
-            route: Route(id: 1, cityId: 1, busreportRouteId: 1, routeName: "АО «ГазМаш» — пос. «Кирпичный»", routeNumber: "12", location: ""),
+            route: Route(id: 1, cityId: 1, busreportRouteId: 1, routeName: "АО «ГазМаш» — пос. «Кирпичный»", routeNumber: "12", location: "71.396123 51.157048, 71.396522 51.159953"),
             city: City(id: 1, name: "Астана", serviceURL: "https://example.com"),
             country: Country(id: 1, code: "kz", name: "Казахстан")
         )

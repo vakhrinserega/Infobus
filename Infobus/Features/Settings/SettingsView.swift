@@ -10,6 +10,12 @@
 //  refreshes on city selection and stale cold launch — neither is
 //  user-configurable, per the discussion with the product owner.
 //
+//  This root screen keeps its own "Настройки" title bar (unlike the other
+//  tabs, which go edge-to-edge) — a Form full of sections reads better with
+//  a header naming the screen. The pushed CitySelectionView/CityListView
+//  destinations below keep their own bar/back button as normal drill-down
+//  screens either way.
+//
 
 import SwiftUI
 import UIKit
@@ -84,7 +90,9 @@ struct SettingsView: View {
                 }
             } else if let error = viewModel.cityDataRefreshError {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(error)
+                    // Same fix as elsewhere — `error` is a plain `String`
+                    // set on the view model; `Text(String)` never localizes.
+                    Text(LocalizedStringKey(error))
                         .foregroundStyle(.secondary)
                     Button("Повторить") {
                         viewModel.retryCityDataRefresh()
@@ -150,8 +158,6 @@ struct SettingsView: View {
                     Text(language.displayName).tag(language)
                 }
             }
-        } footer: {
-            Text("Другие языки появятся здесь по мере добавления переводов.")
         }
     }
 

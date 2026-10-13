@@ -6,6 +6,16 @@
 //  whenever the selected city changes (including from Settings, since both
 //  read the same SelectedCityStore) via .task(id:).
 //
+//  No navigation bar/title — a custom compact search field takes its place
+//  at the top of the list instead of the standard `.searchable` bar, so the
+//  screen isn't carrying a big title above content that doesn't need one.
+//
+//  Tapping a route opens RouteReferenceView (a details card — direction,
+//  endpoints, full stop list), not the live map directly. The live map's
+//  own multi-route picker on the "Карта" tab already covers "put a route on
+//  the map"; this tab's job now is looking a route up and reading about it,
+//  with the map only one button away inside that reference card.
+//
 
 import SwiftUI
 
@@ -17,10 +27,10 @@ struct RoutesListView: View {
     var body: some View {
         NavigationStack {
             content
-                .navigationTitle("Маршруты")
+                .toolbar(.hidden, for: .navigationBar)
                 .navigationDestination(for: Route.self) { route in
                     if let city = cityStore.selectedCity, let country = cityStore.selectedCountry {
-                        RouteDetailView(route: route, city: city, country: country)
+                        RouteReferenceView(route: route, city: city, country: country)
                     } else {
                         ContentUnavailableView("Город не выбран", systemImage: "mappin.slash")
                     }
@@ -49,7 +59,12 @@ struct RoutesListView: View {
                 ContentUnavailableView {
                     Label("Не удалось загрузить маршруты", systemImage: "exclamationmark.triangle")
                 } description: {
-                    Text(message)
+                    // `message` is a plain `String` from the view model —
+                    // `Text(String)` never looks anything up in
+                    // Localizable.xcstrings, so this stayed in Russian
+                    // regardless of the in-app language despite the catalog
+                    // already having translations for this exact text.
+                    Text(LocalizedStringKey(message))
                 } actions: {
                     Button("Повторить", action: reload)
                 }
@@ -57,18 +72,20 @@ struct RoutesListView: View {
                 if routes.isEmpty {
                     ContentUnavailableView("Маршруты не найдены", systemImage: "bus")
                 } else {
-                    List(filteredRoutes(routes)) { route in
-                        NavigationLink(value: route) {
-                            RouteRow(route: route)
+                    VStack(spacing: 0) {
+                        RouteSearchField(text: $searchText)
+                        List(filteredRoutes(routes)) { route in
+                            NavigationLink(value: route) {
+                                RouteRow(route: route)
+                            }
+                        }
+                        .listStyle(.plain)
+                        .overlay {
+                            if filteredRoutes(routes).isEmpty {
+                                ContentUnavailableView.search(text: searchText)
+                            }
                         }
                     }
-                    .listStyle(.plain)
-                    .overlay {
-                        if filteredRoutes(routes).isEmpty {
-                            ContentUnavailableView.search(text: searchText)
-                        }
-                    }
-                    .searchable(text: $searchText, prompt: "Номер или название маршрута")
                 }
             }
         }
@@ -88,6 +105,32 @@ struct RoutesListView: View {
     }
 }
 
+private struct RouteSearchField: View {
+    @Binding var text: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.secondary)
+            TextField("Номер или название маршрута", text: $text)
+                .textFieldStyle(.plain)
+            if !text.isEmpty {
+                Button {
+                    text = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .padding(10)
+        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 10))
+        .padding(.horizontal)
+        .padding(.top, 8)
+        .padding(.bottom, 4)
+    }
+}
+
 private struct RouteRow: View {
     let route: Route
 
@@ -100,7 +143,9 @@ private struct RouteRow: View {
                 .padding(.horizontal, 10)
                 .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
             Text(route.routeName)
-                .foregroundStyle(.primary)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
             Spacer()
         }
         .padding(.vertical, 4)

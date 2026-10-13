@@ -12,7 +12,7 @@ struct NotificationsView: View {
         NavigationStack {
             Text("Уведомления")
                 .foregroundStyle(.secondary)
-                .navigationTitle("Уведомления")
+                .toolbar(.hidden, for: .navigationBar)
         }
     }
 }

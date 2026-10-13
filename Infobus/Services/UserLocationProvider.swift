@@ -8,6 +8,13 @@
 //  (start on appear, stop on disappear) rather than kept as an app-wide
 //  singleton, so nothing polls GPS while no relevant screen is open.
 //
+//  start() actively asks for permission itself (when never asked before)
+//  instead of only working if Settings already triggered the prompt. The
+//  map tab is the app's first screen now, so a rider tapping the map's own
+//  "locate me" button/blue dot needs this to work on its own — waiting for
+//  a visit to Settings first would leave that button silently doing
+//  nothing on a fresh install.
+//
 
 import CoreLocation
 import Combine
@@ -25,12 +32,20 @@ final class UserLocationProvider: NSObject, ObservableObject {
         manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
     }
 
-    /// No-ops if the OS permission isn't already granted — this provider
-    /// doesn't prompt; Settings' own location toggle handles that.
     func start() {
-        let status = manager.authorizationStatus
-        guard status == .authorizedWhenInUse || status == .authorizedAlways else { return }
-        manager.startUpdatingLocation()
+        switch manager.authorizationStatus {
+        case .authorizedWhenInUse, .authorizedAlways:
+            manager.startUpdatingLocation()
+        case .notDetermined:
+            // startUpdatingLocation() happens once the delegate reports the
+            // outcome, below — the user may take a moment to answer the
+            // system prompt.
+            manager.requestWhenInUseAuthorization()
+        case .denied, .restricted:
+            break
+        @unknown default:
+            break
+        }
     }
 
     func stop() {
@@ -39,6 +54,14 @@ final class UserLocationProvider: NSObject, ObservableObject {
 }
 
 extension UserLocationProvider: CLLocationManagerDelegate {
+    nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status = manager.authorizationStatus
+        Task { @MainActor in
+            guard status == .authorizedWhenInUse || status == .authorizedAlways else { return }
+            manager.startUpdatingLocation()
+        }
+    }
+
     nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let coordinate = locations.last?.coordinate else { return }
         Task { @MainActor in

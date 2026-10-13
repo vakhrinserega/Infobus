@@ -28,6 +28,12 @@ struct PositionedBus: Identifiable {
     /// to plausibly belong to it — shown at its nearest point but marked as
     /// uncertain, rather than silently snapped as if the position were solid.
     let isOffRoute: Bool
+    /// Which physical direction this bus is actually moving, inferred from
+    /// its own position trend across polls — nil until a second sample
+    /// exists to compare against (see RouteDetailViewModel). Buses with a
+    /// known direction only ever appear on that one tab; unknown ones show
+    /// on both until resolved.
+    let travelDirection: RouteDirection?
 
     var id: String { bus.id }
 
@@ -43,6 +49,7 @@ struct PlacedBus: Identifiable {
     let isOffRoute: Bool
     let beforeIndex: Int
     let t: Double
+    let travelDirection: RouteDirection?
 
     var id: String { bus.id }
 }

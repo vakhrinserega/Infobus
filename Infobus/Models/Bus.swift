@@ -4,13 +4,14 @@
 //
 //  GET {serviceURL}/cities/{id}/routes/{routeId}/busses
 //
-//  Every live sample fetched while building this returned an empty array
-//  (no vehicles currently reporting), so this shape is transcribed directly
-//  from the old Objective-C JSON converter rather than observed firsthand.
 //  Decoding is deliberately lenient field-by-field — mirroring the old
 //  client's own try/catch around `invalidAdapted` and `filling.percentage` —
 //  so one malformed field drops to a safe default instead of losing the
 //  whole bus (or the whole array, if a single bad item threw).
+//
+//  `direction`: confirmed against real live data (once buses were actually
+//  running) to be the bus's actual compass heading, safe to use directly for
+//  rotating its icon — no need to infer it from successive GPS fixes.
 //
 
 import Foundation
@@ -28,6 +29,8 @@ struct Bus: Decodable, Identifiable {
     }
 
     let name: String
+    /// Compass heading, 0–360°, 0 = north — used directly to rotate the bus
+    /// icon toward its real direction of travel.
     let direction: Int?
     let imei: String?
     let lat: Double
@@ -35,8 +38,10 @@ struct Bus: Decodable, Identifiable {
     let speed: Double?
     let offline: Bool?
     let invalidAdapted: Int
-    /// Cabin occupancy, 0–100. Frequently missing/malformed on the wire — defaults to 0.
-    let filling: Int
+    /// Cabin occupancy, 0–100 — nil when the field is missing/unparseable on
+    /// the wire (frequent), as distinct from an explicit 0%. Callers should
+    /// treat nil as "no data" rather than "empty".
+    let filling: Int?
 
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: lat, longitude: lon)
@@ -62,13 +67,15 @@ struct Bus: Decodable, Identifiable {
         invalidAdapted = (try? container.decodeIfPresent(Int.self, forKey: .invalidAdapted)) ?? 0
 
         if let fillingContainer = try? container.nestedContainer(keyedBy: FillingKeys.self, forKey: .filling) {
-            if let percentString = try? fillingContainer.decodeIfPresent(String.self, forKey: .percentage) {
-                filling = Int(percentString) ?? 0
+            if let percentString = try? fillingContainer.decodeIfPresent(String.self, forKey: .percentage), let value = Int(percentString) {
+                filling = value
+            } else if let value = try? fillingContainer.decodeIfPresent(Int.self, forKey: .percentage) {
+                filling = value
             } else {
-                filling = (try? fillingContainer.decodeIfPresent(Int.self, forKey: .percentage)) ?? 0
+                filling = nil
             }
         } else {
-            filling = 0
+            filling = nil
         }
     }
 }
