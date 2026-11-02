@@ -27,7 +27,13 @@ struct SearchPoint {
 final class SearchViewModel: ObservableObject {
     @Published var fromPoint: SearchPoint?
     @Published var toPoint: SearchPoint?
-    @Published var resultsState: LoadState<[SearchResultItem]> = .idle
+    @Published var resultsState: LoadState<[SearchPath]> = .idle
+
+    /// The server can return dozens of paths for two points with lots of
+    /// nearby stops (the old app capped its own page control at 10) — most
+    /// riders only care about the first few best options anyway, and after
+    /// sorting below, the best ones are always at the front.
+    private static let maxResults = 5
 
     private let apiClient: InfobusAPIClient
 
@@ -46,9 +52,22 @@ final class SearchViewModel: ObservableObject {
         resultsState = .loading
         do {
             let results = try await apiClient.search(city: city, from: fromPoint.coordinate, to: toPoint.coordinate)
-            resultsState = .loaded(results)
+            // Direct connections first, then by how many stops are involved
+            // overall — a stable sort, so paths the server considered more
+            // relevant at equal leg/stop counts keep their original order.
+            let sorted = results.sorted { lhs, rhs in
+                if lhs.legs.count != rhs.legs.count { return lhs.legs.count < rhs.legs.count }
+                return lhs.legs.reduce(0) { $0 + $1.numStops } < rhs.legs.reduce(0) { $0 + $1.numStops }
+            }
+            resultsState = .loaded(Array(sorted.prefix(Self.maxResults)))
         } catch {
-            resultsState = .failed("Не удалось найти маршрут между этими точками")
+            // A single hardcoded message regardless of cause would make a
+            // genuine "no path" response and, say, a network failure read
+            // identically to the rider. Surfacing the real `InfobusAPIError`
+            // case (already has distinct Russian text per failure kind)
+            // costs nothing and actually tells them what went wrong.
+            let detail = (error as? InfobusAPIError)?.errorDescription ?? error.localizedDescription
+            resultsState = .failed("Не удалось найти маршрут между этими точками (\(detail))")
         }
     }
 }

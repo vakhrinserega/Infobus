@@ -1,2030 +1,2547 @@
 {
-  "sourceLanguage": "ru",
-  "strings": {
-    "%@–%@": {
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@–%2$@"
+  "sourceLanguage" : "ru",
+  "strings" : {
+    " — " : {
+
+    },
+    "%@–%@" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@–%2$@"
+          }
+        }
+      }
+    },
+    "%lld" : {
+
+    },
+    "%lld мин" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld мин"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld хв"
+          }
         }
       }
     },
-    "%lld": {},
-    "%lld мин": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld min"
+    "%lld ост." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld stops"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld мин"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld аялдама"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld хв"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld зуп."
           }
         }
       }
     },
-    "%lld ост.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld stops"
+    "%lld сек" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld sec"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld аялдама"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld сек"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld зуп."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld с"
           }
         }
       }
+    },
+    "English" : {
+
     },
-    "%lld сек": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld sec"
+    "Автобусов" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buses"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld сек"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автобус"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld с"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автобусів"
           }
         }
       }
     },
-    "English": {},
-    "Автобусов": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buses"
+    "Автобусом отсюда добраться не получилось найти" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't find a bus route from here"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Автобус"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Осы жерден автобуспен жету жолы табылмады"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Автобусів"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося знайти автобусний маршрут звідси"
           }
         }
       }
     },
-    "Автобусом отсюда добраться не получилось найти": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn't find a bus route from here"
+    "Версия" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Осы жерден автобуспен жету жолы табылмады"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нұсқа"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося знайти автобусний маршрут звідси"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версия"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версія"
+          }
         }
       }
     },
-    "Версия": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Version"
+    "Вопрос" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Question"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нұсқа"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сұрақ"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Питання"
+          }
+        }
+      }
+    },
+    "Время до прибытия" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time to arrival"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Версия"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Келу уақыты"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Версія"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Час до прибуття"
           }
         }
       }
     },
-    "Время до прибытия": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Time to arrival"
+    "Выберите город на вкладке «Настройки»." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a city on the Settings tab."
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Келу уақыты"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«Параметрлер» бөлімінен қаланы таңдаңыз."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Час до прибуття"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите город на вкладке «Настройки»."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Виберіть місто на вкладці «Налаштування»."
+          }
         }
       }
     },
-    "Выберите город на вкладке «Настройки».": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Select a city on the Settings tab."
+    "Геолокация отключена в системе" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location is turned off in system settings"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "«Параметрлер» бөлімінен қаланы таңдаңыз."
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Геолокация жүйеде өшірілген"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Выберите город на вкладке «Настройки»."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Геолокация отключена в системе"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Виберіть місто на вкладці «Налаштування»."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Геолокацію вимкнено в системі"
           }
         }
       }
     },
-    "Геолокация отключена в системе": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Location is turned off in system settings"
+    "Город" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "City"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Геолокация жүйеде өшірілген"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Қала"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Геолокация отключена в системе"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Город"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Геолокацію вимкнено в системі"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Місто"
           }
         }
       }
     },
-    "Город": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "City"
+    "Город не выбран" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No city selected"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Қала"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Қала таңдалмаған"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Город"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Город не выбран"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Місто"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Місто не вибрано"
           }
         }
       }
     },
-    "Город не выбран": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No city selected"
+    "Готово" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Қала таңдалмаған"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дайын"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Город не выбран"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Місто не вибрано"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готово"
           }
         }
       }
     },
-    "Готово": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Done"
+    "Добавить" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Қосу"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Дайын"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Додати"
+          }
+        }
+      }
+    },
+    "Если у вас есть вопрос или жалоба, напишите нам — ответ появится здесь." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you have a question or complaint, write to us — the answer will appear here."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Готово"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сұрағыңыз немесе шағымыңыз болса, бізге жазыңыз — жауап осында көрінеді."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Готово"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Якщо у вас є питання або скарга, напишіть нам — відповідь з’явиться тут."
           }
         }
       }
     },
-    "Добавить": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add"
+    "Заполненность: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Occupancy: %@"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Қосу"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Толуы: %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Додати"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заповненість: %@"
           }
         }
       }
     },
-    "Заполненность: %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Occupancy: %@"
+    "Интервал" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interval"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Толуы: %@"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аралығы"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Заповненість: %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Інтервал"
           }
         }
       }
     },
-    "Интервал": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Interval"
+    "Использовать эту точку" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use this point"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Аралығы"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Осы нүктені пайдалану"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Інтервал"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Використати цю точку"
           }
         }
       }
     },
-    "Использовать эту точку": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Use this point"
+    "Используется, чтобы показать вас на карте и подсветить вашу остановку на схеме маршрута." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Used to show your location on the map and highlight your stop on the route diagram."
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Осы нүктені пайдалану"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Картада өзіңізді көрсету және бағыт схемасында аялдамаңызды белгілеу үшін пайдаланылады."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Використати цю точку"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Используется, чтобы показать вас на карте и подсветить вашу остановку на схеме маршрута."
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Використовується, щоб показати вас на карті та підсвітити вашу зупинку на схемі маршруту."
+          }
         }
       }
     },
-    "Используется, чтобы показать вас на карте и подсветить вашу остановку на схеме маршрута.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Used to show your location on the map and highlight your stop on the route diagram."
+    "Карта" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Карта"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Карта"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Картада өзіңізді көрсету және бағыт схемасында аялдамаңызды белгілеу үшін пайдаланылады."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Карта"
           }
+        }
+      }
+    },
+    "Когда появится новое объявление для вашего города, оно отобразится здесь." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When a new announcement for your city appears, it will show up here."
+          }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Используется, чтобы показать вас на карте и подсветить вашу остановку на схеме маршрута."
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сіздің қалаңыз үшін жаңа хабарландыру шыққанда, ол осында көрсетіледі."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Використовується, щоб показати вас на карті та підсвітити вашу зупинку на схемі маршруту."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Коли з’явиться нове оголошення для вашого міста, воно відобразиться тут."
           }
         }
       }
     },
-    "Карта": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Map"
+    "Куда" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Қайда"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Карта"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Куди"
           }
+        }
+      }
+    },
+    "Қазақша" : {
+
+    },
+    "Маршрут" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route"
+          }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Карта"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бағыт"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Карта"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Маршрут"
           }
         }
       }
     },
-    "Куда": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "To"
+    "Маршрут № %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route %@"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Қайда"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бағыт № %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Куди"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Маршрут № %@"
           }
         }
       }
     },
-    "Маршрут": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Route"
+    "Маршрут на карте" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route on the map"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бағыт"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Картадағы бағыт"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Маршрут"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Маршрут на карті"
           }
         }
       }
     },
-    "Маршрут № %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Route %@"
+    "Маршруты" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Routes"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бағыттар"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бағыт № %@"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Маршруты"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Маршрут № %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Маршрути"
           }
         }
       }
     },
-    "Маршруты": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Routes"
+    "Маршруты на карте" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Routes on the map"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Картадағы бағыттар"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бағыттар"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Маршрути на карті"
+          }
+        }
+      }
+    },
+    "Маршруты не выбраны" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No routes selected"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Маршруты"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бағыттар таңдалмаған"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Маршрути"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Маршрути не вибрано"
           }
         }
       }
     },
-    "Маршруты на карте": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Routes on the map"
+    "Маршруты не найдены" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No routes found"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бағыттар табылмады"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Картадағы бағыттар"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Маршруты не найдены"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Маршрути на карті"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Маршрутів не знайдено"
           }
         }
       }
     },
-    "Маршруты не выбраны": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No routes selected"
+    "Моё местоположение" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My location"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бағыттар таңдалмаған"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Менің орналасқан жерім"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Маршрути не вибрано"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Моє місцезнаходження"
           }
         }
       }
     },
-    "Маршруты не найдены": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No routes found"
+    "Можно выбрать не более 5 маршрутов" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can select up to 5 routes"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ең көбі 5 бағыт таңдауға болады"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бағыттар табылмады"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Можна вибрати не більше 5 маршрутів"
           }
+        }
+      }
+    },
+    "Мои обращения" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My requests"
+          }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Маршруты не найдены"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Менің өтініштерім"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Маршрутів не знайдено"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мої звернення"
           }
         }
       }
     },
-    "Можно выбрать не более 5 маршрутов": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You can select up to 5 routes"
+    "Нажмите «Добавить», чтобы выбрать до 5 маршрутов." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap “Add” to select up to 5 routes."
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ең көбі 5 бағыт таңдауға болады"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 бағытқа дейін таңдау үшін «Қосу» түймесін басыңыз."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Можна вибрати не більше 5 маршрутів"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Натисніть «Додати», щоб вибрати до 5 маршрутів."
           }
         }
       }
     },
-    "Моё местоположение": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My location"
+    "Нажмите на карту, чтобы указать точку" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap the map to set a point"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Менің орналасқан жерім"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нүктені белгілеу үшін картаны басыңыз"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Моє місцезнаходження"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Натисніть на карту, щоб вказати точку"
           }
         }
       }
     },
-    "Нажмите «Добавить», чтобы выбрать до 5 маршрутов.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tap “Add” to select up to 5 routes."
+    "Название остановки" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop name"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "5 бағытқа дейін таңдау үшін «Қосу» түймесін басыңыз."
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аялдама атауы"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Натисніть «Додати», щоб вибрати до 5 маршрутів."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Назва зупинки"
           }
         }
       }
     },
-    "Нажмите на карту, чтобы указать точку": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tap the map to set a point"
+    "Найдите маршрут" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find a route"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нүктені белгілеу үшін картаны басыңыз"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бағытты табыңыз"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Натисніть на карту, щоб вказати точку"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Знайдіть маршрут"
           }
         }
       }
     },
-    "Название остановки": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stop name"
+    "Найти" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Аялдама атауы"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Табу"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Назва зупинки"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Знайти"
           }
         }
       }
     },
-    "Найдите маршрут": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Find a route"
+    "Написать в поддержку" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact support"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Қолдау қызметіне жазу"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бағытты табыңыз"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Написать в поддержку"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Знайдіть маршрут"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Написати в підтримку"
           }
         }
       }
     },
-    "Найти": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Find"
+    "Написать обращение" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write a request"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Табу"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Өтініш жазу"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Знайти"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Написати звернення"
           }
         }
       }
     },
-    "Написать в поддержку": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Contact support"
+    "Направление" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direction"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Қолдау қызметіне жазу"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жүру бағыты"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Написать в поддержку"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Направление"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Написати в підтримку"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Напрямок"
           }
         }
       }
     },
-    "Направление": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Direction"
+    "Настройки" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Жүру бағыты"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Параметрлер"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Направление"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настройки"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Напрямок"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Налаштування"
           }
         }
       }
     },
-    "Настройки": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Settings"
+    "Не выбран" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not selected"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Таңдалмаған"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Параметрлер"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не выбран"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вибрано"
+          }
+        }
+      }
+    },
+    "Не удалось загрузить маршрут" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't load the route"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Настройки"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бағытты жүктеу мүмкін болмады"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Налаштування"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося завантажити маршрут"
           }
         }
       }
     },
-    "Не выбран": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Not selected"
+    "Не удалось загрузить маршруты" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't load routes"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Таңдалмаған"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бағыттарды жүктеу мүмкін болмады"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не выбран"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось загрузить маршруты"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вибрано"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося завантажити маршрути"
           }
         }
       }
     },
-    "Не удалось загрузить маршрут": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn't load the route"
+    "Не удалось загрузить объявление" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t load the announcement"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бағытты жүктеу мүмкін болмады"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хабарландыруды жүктеу мүмкін болмады"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося завантажити маршрут"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося завантажити оголошення"
           }
         }
       }
     },
-    "Не удалось загрузить маршруты": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn't load routes"
+    "Не удалось загрузить остановки" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't load stops"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бағыттарды жүктеу мүмкін болмады"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аялдамаларды жүктеу мүмкін болмады"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось загрузить маршруты"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось загрузить остановки"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося завантажити маршрути"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося завантажити зупинки"
           }
         }
       }
     },
-    "Не удалось загрузить остановки": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn't load stops"
+    "Не удалось загрузить список городов" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't load the list of cities"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Қалалар тізімі жүктелмеді"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Аялдамаларды жүктеу мүмкін болмады"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося завантажити список міст"
           }
+        }
+      }
+    },
+    "Не удалось загрузить список стран" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't load the list of countries"
+          }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось загрузить остановки"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Елдер тізімі жүктелмеді"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося завантажити зупинки"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося завантажити список країн"
           }
         }
       }
     },
-    "Не удалось загрузить список городов": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn't load the list of cities"
+    "Не удалось найти маршрут между этими точками" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't find a route between these points"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Қалалар тізімі жүктелмеді"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Осы нүктелердің арасында бағыт табылмады"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося завантажити список міст"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося знайти маршрут між цими точками"
           }
         }
       }
     },
-    "Не удалось загрузить список стран": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn't load the list of countries"
+    "Не удалось обновить маршруты и остановки для этого города" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't refresh routes and stops for this city"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Елдер тізімі жүктелмеді"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Осы қала үшін бағыттар мен аялдамалар жаңартылмады"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося завантажити список країн"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не вдалося оновити маршрути та зупинки для цього міста"
           }
         }
       }
     },
-    "Не удалось найти маршрут между этими точками": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn't find a route between these points"
+    "Нет активных объявлений" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No active announcements"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Осы нүктелердің арасында бағыт табылмады"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Белсенді хабарландырулар жоқ"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося знайти маршрут між цими точками"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Активних оголошень немає"
           }
         }
       }
     },
-    "Не удалось обновить маршруты и остановки для этого города": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Couldn't refresh routes and stops for this city"
+    "Нет данных о прибытии" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No arrival data"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Осы қала үшін бағыттар мен аялдамалар жаңартылмады"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Келу туралы деректер жоқ"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не вдалося оновити маршрути та зупинки для цього міста"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Даних про прибуття немає"
           }
         }
       }
     },
-    "Нет данных о прибытии": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No arrival data"
+    "Нет данных о прибытии для этой остановки." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No arrival data for this stop."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Осы аялдама үшін келу туралы деректер жоқ."
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Келу туралы деректер жоқ"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет данных о прибытии для этой остановки."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Даних про прибуття немає"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Немає даних про прибуття для цієї зупинки."
           }
         }
       }
     },
-    "Нет данных о прибытии для этой остановки.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No arrival data for this stop."
+    "Нет обращений" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No requests yet"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Осы аялдама үшін келу туралы деректер жоқ."
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Өтініштер жоқ"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нет данных о прибытии для этой остановки."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Звернень немає"
           }
+        }
+      }
+    },
+    "Новое обращение" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New request"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жаңа өтініш"
+          }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Немає даних про прибуття для цієї зупинки."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нове звернення"
           }
         }
       }
     },
-    "Номер или название маршрута": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Route number or name"
+    "Номер или название маршрута" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route number or name"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бағыт нөмірі немесе атауы"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бағыт нөмірі немесе атауы"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Номер или название маршрута"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Номер или название маршрута"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Номер або назва маршруту"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Номер або назва маршруту"
           }
         }
       }
     },
-    "Обновить": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Refresh"
+    "Обновить" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refresh"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Жаңарту"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жаңарту"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Обновить"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновить"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Оновити"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оновити"
           }
         }
       }
     },
-    "Обновлено %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Updated %@"
+    "Обновлено %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updated %@"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Жаңартылды: %@"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жаңартылды: %@"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Оновлено %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оновлено %@"
           }
         }
       }
     },
-    "Обновляем маршруты и остановки…": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Updating routes and stops…"
+    "Обновляем маршруты и остановки…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updating routes and stops…"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бағыттар мен аялдамалар жаңартылуда…"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бағыттар мен аялдамалар жаңартылуда…"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Обновляем маршруты и остановки…"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновляем маршруты и остановки…"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Оновлюємо маршрути та зупинки…"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оновлюємо маршрути та зупинки…"
           }
         }
       }
     },
-    "Обратно": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Return"
+    "Обратно" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Return"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кері"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кері бағыт"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Обратно"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обратно"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Назад"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Назад"
           }
         }
       }
     },
-    "Определяет, какие маршруты, остановки и автобусы показываются в приложении.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Determines which routes, stops, and buses are shown in the app."
+    "Обращение № %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Request #%lld"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Қолданбада қандай бағыттар, аялдамалар және автобустар көрсетілетінін анықтайды."
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Өтініш № %lld"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Звернення № %lld"
+          }
+        }
+      }
+    },
+    "Обращения пока недоступны для этого города" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support requests aren’t available for this city yet"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Определяет, какие маршруты, остановки и автобусы показываются в приложении."
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бұл қала үшін өтініштер әзірге қолжетімді емес"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Визначає, які маршрути, зупинки та автобуси показуються в застосунку."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Звернення поки що недоступні для цього міста"
           }
         }
       }
     },
-    "Определять моё местоположение": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Use my location"
+    "Объявление" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Announcement"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Орналасқан жерімді анықтау"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хабарландыру"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Определять моё местоположение"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оголошення"
           }
+        }
+      }
+    },
+    "Объявления" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Announcements"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хабарландырулар"
+          }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Визначати моє місцезнаходження"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оголошення"
           }
         }
       }
     },
-    "Остановки не найдены": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No stops found"
+    "Ожидает ответа" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awaiting reply"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жауап күтілуде"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Аялдамалар табылмады"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Очікує відповіді"
+          }
+        }
+      }
+    },
+    "Опишите ваш вопрос или проблему" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Describe your question or issue"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Остановки не найдены"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сұрағыңызды немесе мәселеңізді сипаттаңыз"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Зупинок не знайдено"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Опишіть ваше питання або проблему"
           }
         }
       }
     },
-    "Открыть Настройки": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Open Settings"
+    "Определяет, какие маршруты, остановки и автобусы показываются в приложении." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Determines which routes, stops, and buses are shown in the app."
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Параметрлерді ашу"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Қолданбада қандай бағыттар, аялдамалар және автобустар көрсетілетінін анықтайды."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Открыть Настройки"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Определяет, какие маршруты, остановки и автобусы показываются в приложении."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Відкрити Налаштування"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Визначає, які маршрути, зупинки та автобуси показуються в застосунку."
           }
         }
       }
     },
-    "Откуда": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "From"
+    "Определять моё местоположение" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use my location"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Орналасқан жерімді анықтау"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Қайдан"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Определять моё местоположение"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Звідки"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Визначати моє місцезнаходження"
           }
         }
       }
     },
-    "Отмена": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancel"
+    "Остановки не найдены" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No stops found"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аялдамалар табылмады"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бас тарту"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Остановки не найдены"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Скасувати"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зупинок не знайдено"
           }
         }
       }
     },
-    "Отмечать автобусы с пандусом": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mark buses with a ramp"
+    "Ответ" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Answer"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пандусы бар автобустарды белгілеу"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жауап"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відповідь"
+          }
+        }
+      }
+    },
+    "Ответ получен" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Replied"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Отмечать автобусы с пандусом"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жауап келді"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Позначати автобуси з пандусом"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відповідь отримано"
           }
         }
       }
     },
-    "Ошибка поиска": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search error"
+    "Открыть Настройки" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Іздеу қатесі"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Параметрлерді ашу"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Помилка пошуку"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открыть Настройки"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкрити Налаштування"
+          }
         }
       }
     },
-    "Повторить": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retry"
+    "Откуда" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Қайталау"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Қайдан"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Звідки"
+          }
+        }
+      }
+    },
+    "Отмена" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Повторить"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Бас тарту"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Повторити"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скасувати"
           }
         }
       }
     },
-    "Поиск": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search"
+    "Отмечать автобусы с пандусом" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark buses with a ramp"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Іздеу"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пандусы бар автобустарды белгілеу"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Поиск"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отмечать автобусы с пандусом"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пошук"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Позначати автобуси з пандусом"
           }
         }
       }
     },
-    "Показать на карте": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Show on map"
+    "Отправить" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Картада көрсету"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жіберу"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Показати на карті"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Надіслати"
           }
         }
       }
     },
-    "Показываются все автобусы; при включении оборудованные пандусом отмечаются отдельным значком.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "All buses are shown; when enabled, ramp-equipped buses get a separate badge."
+    "Ошибка поиска" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search error"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Барлық автобустар көрсетіледі; қосылған кезде пандусы бар автобустар бөлек белгішемен көрсетіледі."
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Іздеу қатесі"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Помилка пошуку"
+          }
+        }
+      }
+    },
+    "Пересадка на «%@»" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transfer at “%@”"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Показываются все автобусы; при включении оборудованные пандусом отмечаются отдельным значком."
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«%@» аялдамасында ауысу"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Показуються всі автобуси; коли увімкнено, обладнані пандусом позначаються окремим значком."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пересадка на «%@»"
           }
         }
       }
     },
-    "Понятно": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Got it"
+    "Пешком до остановки" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walking to the stop"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Түсінікті"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аялдамаға дейін жаяу"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Зрозуміло"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пішки до зупинки"
           }
         }
       }
     },
-    "Русский": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Русский"
+    "Пешком от остановки" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walking from the stop"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Аялдамадан жаяу"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пішки від зупинки"
           }
         }
       }
     },
-    "Сбросить": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reset"
+    "Повторить" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Қайталау"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Тазалау"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повторить"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Скинути"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повторити"
           }
         }
       }
     },
-    "Светлая": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Light"
+    "Поиск" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Іздеу"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поиск"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Жарық"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пошук"
+          }
+        }
+      }
+    },
+    "Показать на карте" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show on map"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Светлая"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Картада көрсету"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Світла"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показати на карті"
           }
         }
       }
     },
-    "Системная": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "System"
+    "Показываются все автобусы; при включении оборудованные пандусом отмечаются отдельным значком." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All buses are shown; when enabled, ramp-equipped buses get a separate badge."
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Жүйелік"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Барлық автобустар көрсетіледі; қосылған кезде пандусы бар автобустар бөлек белгішемен көрсетіледі."
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Системная"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показываются все автобусы; при включении оборудованные пандусом отмечаются отдельным значком."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Системна"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показуються всі автобуси; коли увімкнено, обладнані пандусом позначаються окремим значком."
           }
         }
       }
     },
-    "Системный": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "System"
+    "Понятно" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Got it"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Жүйелік"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Түсінікті"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зрозуміло"
+          }
+        }
+      }
+    },
+    "Русский" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Русский"
           }
+        }
+      }
+    },
+    "Сбросить" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset"
+          }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Системный"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тазалау"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Системна"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скинути"
           }
         }
       }
     },
-    "Скорость: %lld км/ч": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Speed: %lld km/h"
+    "Светлая" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жарық"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Жылдамдығы: %lld км/сағ"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Светлая"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Швидкість: %lld км/год"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Світла"
           }
         }
       }
     },
-    "Страна": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Country"
+    "Системная" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ел"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жүйелік"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Страна"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Системная"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Країна"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Системна"
           }
         }
       }
     },
-    "Тема": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Theme"
+    "Системный" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жүйелік"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Тақырып"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Системный"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Системна"
+          }
+        }
+      }
+    },
+    "Скорость: %lld км/ч" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speed: %lld km/h"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Тема"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жылдамдығы: %lld км/сағ"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Тема"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Швидкість: %lld км/год"
           }
         }
       }
     },
-    "Туда": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Outbound"
+    "Страна" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Country"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Барыс"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ел"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Туда"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Страна"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Туди"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Країна"
           }
         }
       }
     },
-    "Тёмная": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dark"
+    "Тема" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Theme"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Қараңғы"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тақырып"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Тёмная"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тема"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Темна"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тема"
           }
         }
       }
     },
-    "Уберите один из выбранных маршрутов, чтобы добавить «%@».": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Remove one of the selected routes to add “%@”."
+    "Тёмная" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Қараңғы"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "«%@» қосу үшін таңдалған бағыттардың бірін алып тастаңыз."
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тёмная"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Приберіть один із вибраних маршрутів, щоб додати «%@»."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Темна"
           }
         }
       }
     },
-    "Уведомления": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notifications"
+    "Туда" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outbound"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Хабарландырулар"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тура бағыт"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Уведомления"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Туда"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сповіщення"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Туди"
           }
         }
       }
     },
-    "Укажите на карте, откуда и куда вы едете.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mark on the map where you're going from and to."
+    "Уберите один из выбранных маршрутов, чтобы добавить «%@»." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove one of the selected routes to add “%@”."
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Картада қайдан және қайда бара жатқаныңызды көрсетіңіз."
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«%@» қосу үшін таңдалған бағыттардың бірін алып тастаңыз."
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вкажіть на карті, звідки й куди ви їдете."
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приберіть один із вибраних маршрутів, щоб додати «%@»."
           }
         }
       }
     },
-    "Укажите точку на карте": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tap the map to pick a point"
+    "Уведомления" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Картадан нүктені белгілеңіз"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хабарландырулар"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вкажіть точку на карті"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уведомления"
           }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сповіщення"
+          }
         }
       }
     },
-    "Українська": {},
-    "Язык": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Language"
+    "Укажите на карте, откуда и куда вы едете." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark on the map where you're going from and to."
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Картада қайдан және қайда бара жатқаныңызды көрсетіңіз."
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Тіл"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вкажіть на карті, звідки й куди ви їдете."
+          }
+        }
+      }
+    },
+    "Укажите точку на карте" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap the map to pick a point"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Язык"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Картадан нүктені белгілеңіз"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мова"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вкажіть точку на карті"
           }
         }
       }
+    },
+    "Українська" : {
+
     },
-    "Қазақша": {}
+    "Язык" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тіл"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Язык"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мова"
+          }
+        }
+      }
+    }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

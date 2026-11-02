@@ -58,7 +58,21 @@ struct Bus: Decodable, Identifiable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         name = (try? container.decodeIfPresent(String.self, forKey: .name)) ?? ""
-        direction = try? container.decodeIfPresent(Int.self, forKey: .direction)
+        // Same string-or-number inconsistency as `filling.percentage`
+        // below — some backends send this as a numeric string rather
+        // than a bare number. A plain `decodeIfPresent(Int.self, ...)`
+        // would throw on a string value, and the surrounding `try?`
+        // would silently swallow that into `nil` — meaning every bus
+        // from such a backend would decode fine but with NO direction at
+        // all, with nothing in the logs to say why. Try the string form
+        // first, same pattern as `filling`.
+        if let directionString = try? container.decodeIfPresent(String.self, forKey: .direction), let value = Int(directionString) {
+            direction = value
+        } else if let value = try? container.decodeIfPresent(Int.self, forKey: .direction) {
+            direction = value
+        } else {
+            direction = nil
+        }
         imei = try? container.decodeIfPresent(String.self, forKey: .imei)
         lat = (try? container.decodeIfPresent(Double.self, forKey: .lat)) ?? 0
         lon = (try? container.decodeIfPresent(Double.self, forKey: .lon)) ?? 0

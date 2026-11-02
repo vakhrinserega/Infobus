@@ -5,7 +5,7 @@
 //  Station and bus pin views shared by the single-route screen and the
 //  multi-route "Карта" tab.
 //
-//  Station pins are now a fixed black-border/white-fill dot regardless of
+//  Station pins are a fixed black-border/white-fill dot regardless of
 //  route color — a station is often served by several differently-colored
 //  routes at once, so tinting its pin to just one of them was always a
 //  little arbitrary, and it fought visually with the also-colored bus
@@ -13,16 +13,24 @@
 //  `stationScale` in MapView/RouteDetailView) rather than this view
 //  knowing about camera distance itself.
 //
-//  Bus markers stay route-colored (that part wasn't asked to change), but
-//  their silhouette is now a "drop" that points in the bus's own heading
-//  when one is known — the same idea the old Objective-C app's own bus
-//  markers used (see TeardropShape below), rebuilt as a SwiftUI Shape
-//  instead of hand-rolled Core Graphics — plus a bigger base size, both
-//  per direct feedback that the old plain colored circle was hard to spot
-//  at a glance. No glyph drawn inside it either, matching the old app's
-//  actual design (color + a small occupancy dot, nothing else) — an
-//  earlier pass added a bus.fill icon on top that was never asked for and
-//  read as new/unwanted clutter, so it's gone again.
+//  Bus markers follow the written spec's "Вариант №3 — Стрелка
+//  направления": a plain circle in the route's color with a white bus
+//  glyph centered inside it, a triangular pointer just outside the circle
+//  that rotates to the bus's heading, and a colored arc around the
+//  outside of the circle whose length and color encode occupancy. The
+//  three signals are deliberately independent of one another — route
+//  color never changes for occupancy, the pointer never changes shape or
+//  color for occupancy, and the arc never touches the circle's own fill —
+//  so each can be read (or be absent) without disturbing the others.
+//
+//  The pointer additionally corrects for the MAP's own current heading,
+//  not just the bus's: MapKit's annotation views stay screen-upright on
+//  their own (they don't inherit the map's rotation), so a bus's pointer
+//  would show its true geographic bearing rather than its bearing
+//  *relative to the screen* the moment the user rotates the map (the
+//  compass control, or a two-finger twist). Callers pass the live
+//  `MapCamera.heading` in for this; it defaults to 0 (north-up) for
+//  anything that doesn't track the camera (e.g. the preview below).
 //
 
 import SwiftUI
@@ -72,7 +80,20 @@ struct StationAnnotationView: View {
 
     var body: some View {
         StationPinView(isCurrent: isCurrent)
-            .onTapGesture { isSheetPresented = true }
+            .contentShape(Rectangle())
+            // `.highPriorityGesture` rather than a plain `.onTapGesture`
+            // — same reasoning as the zoom/locate-me buttons in
+            // MapView.swift: this pin sits directly inside the `Map`'s
+            // own content, which means it's even more exposed than
+            // those buttons were to losing a tap to MapKit's own native
+            // pan/pinch/double-tap recognizers on the same surface. This
+            // makes the pin's own tap win outright instead of competing
+            // for the touch.
+            .highPriorityGesture(
+                TapGesture().onEnded {
+                    isSheetPresented = true
+                }
+            )
             .sheet(isPresented: $isSheetPresented) {
                 StationPredictionSheet(station: station, fetch: fetch, colorForRoute: colorForRoute)
             }
@@ -81,125 +102,222 @@ struct StationAnnotationView: View {
 
 struct BusPinView: View {
     let isOffRoute: Bool
-    /// nil when Bus.direction was missing on the wire — the pin falls back
-    /// to a plain circle in that case, since a drop shape's whole point is
-    /// to show which way it's pointed.
+    /// nil when Bus.direction was missing on the wire — the direction
+    /// pointer (and the heading-rotation it needs) only ever appears once
+    /// this is known.
     let bearing: Double?
     /// This bus's route color — matches the route's own line color, the
     /// same way the old app colored a route's buses to match its line.
+    /// Always the circle's fill AND the pointer's color; occupancy never
+    /// touches either.
     let routeColor: Color
-    /// Cabin occupancy 0–100, nil when not reported. When known, it takes
-    /// over the fill color (green/yellow/red) with the route color moving
-    /// to a ring around it, so the bus is still identifiable by route even
-    /// while showing how full it is.
+    /// Cabin occupancy 0–100, nil when not reported. Drawn as a colored
+    /// arc around the OUTSIDE of the circle, its length proportional to
+    /// the percentage and its color stepped across four bands — never a
+    /// fill/border/dot change on the circle itself, so route identity and
+    /// occupancy never compete for the same patch of color.
     let occupancyPercent: Int?
+    /// The map camera's current heading (compass degrees the screen's top
+    /// currently points to; 0 = north-up) — see the file header for why
+    /// the pointer needs this on top of the bus's own bearing.
+    var mapHeading: Double = 0
 
-    /// Bumped up well past the original 26pt circle — easier to pick a
-    /// bus out at a glance, especially with several routes' worth on
-    /// screen together, and a big enough jump to actually read as
-    /// noticeably bigger rather than a marginal change.
+    private let circleDiameter: CGFloat = 34
+    private let outlineWidth: CGFloat = 1.75
+    /// A bit further out from the circle than before, and the arc itself
+    /// is now outlined in black (see `pointerLayer`'s sibling below) so it
+    /// reads as its own separate, framed badge rather than something
+    /// stuck right onto the circle's edge.
+    private let arcDiameter: CGFloat = 46
+    private let arcWidth: CGFloat = 3.5
+    private let arcFrameWidth: CGFloat = 1.5
+    /// The pointer's colored (inner) size — back to what it was before
+    /// going smaller to make room for an inward border, per direct
+    /// feedback that made the arrow read as less noticeable. The white
+    /// border below now grows OUTWARD from this instead, and thicker than
+    /// it was originally.
+    private let pointerSize = CGSize(width: 16, height: 18)
+    private let pointerBorderWidth: CGFloat = 3
     private let size: CGFloat = 44
 
     var body: some View {
-        silhouette
-            .shadow(radius: 1)
-    }
-
-    /// Fill, occupancy ring, and the off-route dashed outline, bundled
-    /// into one group so they share a single rotation rather than each
-    /// needing `.rotationEffect` repeated on it separately.
-    ///
-    /// Uses `.stroke` rather than `.strokeBorder` throughout — the latter
-    /// needs `InsettableShape`, which the type-erased `AnyShape` used for
-    /// `shape` below doesn't conform to (only plain `Shape`). `.stroke`
-    /// centers the line on the path instead of insetting it, a pixel or
-    /// two of visual difference at this size that isn't worth carrying an
-    /// `InsettableShape`-conforming version of `TeardropShape` for.
-    private var silhouette: some View {
         ZStack {
-            shape.fill(fillColor)
-            if occupancyPercent != nil && !isOffRoute {
-                shape.stroke(routeColor, lineWidth: 3)
+            if let occupancyColor, !isOffRoute {
+                ZStack {
+                    // A black backing arc, same path, a bit wider — drawn
+                    // first so a thin black edge shows on both sides and
+                    // both ends of the colored arc on top of it, framing
+                    // it instead of leaving it as a bare colored line.
+                    OccupancyArc(fraction: occupancyFraction)
+                        .stroke(Color.black, style: StrokeStyle(lineWidth: arcWidth + arcFrameWidth * 2, lineCap: .butt))
+                    OccupancyArc(fraction: occupancyFraction)
+                        .stroke(occupancyColor, style: StrokeStyle(lineWidth: arcWidth, lineCap: .butt))
+                }
+                .frame(width: arcDiameter, height: arcDiameter)
+                // Starts diametrically opposite the pointer (the arc's
+                // own "top" rotated 180° past `screenBearing`) rather
+                // than always at the top, and turns together with the
+                // pointer — so the filling always sits on the side of
+                // the bus AWAY from the direction it's facing, instead
+                // of looking like it's stuck off to one side.
+                .rotationEffect(.degrees(screenBearing + 180))
             }
-            if isOffRoute {
-                shape
-                    .stroke(style: StrokeStyle(lineWidth: 1.5, dash: [3, 2]))
-                    .foregroundStyle(.gray)
-                    .padding(-3)
+
+            if bearing != nil {
+                pointerLayer
             }
+
+            circleLayer
+
+            // Kept OUTSIDE `circleLayer`'s own ZStack and un-rotated, same
+            // reasoning as the pointer being in its own layer: a tilted
+            // bus glyph would read as wrong rather than as "pointing
+            // somewhere" — only the pointer conveys direction.
+            Image(systemName: "bus.fill")
+                .font(.system(size: circleDiameter * 0.5, weight: .semibold))
+                .foregroundStyle(.white)
         }
         .frame(width: size, height: size)
-        .rotationEffect(.degrees(bearing ?? 0))
+        .shadow(color: .black.opacity(0.3), radius: 1.5, y: 1)
     }
 
-    private var shape: AnyShape {
-        bearing != nil ? AnyShape(TeardropShape()) : AnyShape(Circle())
+    private var circleLayer: some View {
+        Circle()
+            .fill(isOffRoute ? Color.gray : routeColor)
+            .overlay(
+                Circle().stroke(Color.white, lineWidth: outlineWidth)
+            )
+            .overlay {
+                if isOffRoute {
+                    Circle()
+                        .stroke(style: StrokeStyle(lineWidth: 1.5, dash: [3, 2]))
+                        .foregroundStyle(.gray)
+                        .padding(-3)
+                }
+            }
+            .frame(width: circleDiameter, height: circleDiameter)
     }
 
-    private var fillColor: Color {
-        if isOffRoute { return .gray }
-        return occupancyColor ?? routeColor
+    /// The triangular direction pointer, drawn inside its own `size`×`size`
+    /// frame so rotating it pivots around the circle's own center rather
+    /// than the triangle's own (off-center) bounding box — authored
+    /// tip-up and offset just outside the circle's top edge at rest, then
+    /// rotated by `screenBearing`, so a bearing of 0°/90°/180°/270°
+    /// (relative to the screen) ends up pointing up/right/down/left —
+    /// standard clockwise-from-north compass convention.
+    /// The pointer's full visible size, border included — needed to
+    /// position it correctly against the circle (see `pointerLayer`)
+    /// since the white border now grows OUTWARD past `pointerSize`.
+    private var pointerOuterSize: CGSize {
+        CGSize(
+            width: pointerSize.width + pointerBorderWidth * 2,
+            height: pointerSize.height + pointerBorderWidth * 2
+        )
     }
 
+    private var pointerLayer: some View {
+        ZStack {
+            // A bigger white silhouette behind the colored triangle —
+            // `Triangle` doesn't conform to `InsettableShape` (same
+            // reason the circle's own border is a real `.stroke` rather
+            // than a `.strokeBorder`), so a thicker border here is a
+            // second, bigger copy underneath rather than an inset
+            // stroke. Keeps the colored arrow itself at full size (it
+            // was reading as less noticeable when the border ate into it
+            // instead) while still standing out against the map.
+            Triangle()
+                .fill(Color.white)
+                .frame(width: pointerOuterSize.width, height: pointerOuterSize.height)
+            Triangle()
+                // Same color as the body circle ("капля") — route color,
+                // or gray while off-route.
+                .fill(isOffRoute ? Color.gray : routeColor)
+                .frame(width: pointerSize.width, height: pointerSize.height)
+        }
+        .offset(y: -(circleDiameter / 2 + 1 + pointerOuterSize.height / 2))
+        .frame(width: size, height: size)
+        .rotationEffect(.degrees(screenBearing))
+    }
+
+    /// The bus's geographic bearing, corrected for the map's own current
+    /// on-screen rotation — see the file header.
+    private var screenBearing: Double {
+        (bearing ?? 0) - mapHeading
+    }
+
+    private var occupancyFraction: Double {
+        guard let occupancyPercent else { return 0 }
+        return min(max(Double(occupancyPercent) / 100, 0), 1)
+    }
+
+    /// Thresholds and exact colors per spec: 0–30% green, 31–70% yellow,
+    /// 71–90% orange, 91–100% red.
     private var occupancyColor: Color? {
         guard let occupancyPercent else { return nil }
         switch occupancyPercent {
-        case ..<40: return .green
-        case 40..<75: return .yellow
-        default: return .red
+        case 0...30: return Color(hex: 0x22C55E)
+        case 31...70: return Color(hex: 0xFACC15)
+        case 71...90: return Color(hex: 0xF97316)
+        default: return Color(hex: 0xEF4444)
         }
     }
 }
 
-/// A rounded "drop" pointing up by default — a sharp point at the top,
-/// tangent lines down to a round back — matching the silhouette the old
-/// (Objective-C) app's own bus markers drew by hand with Core Graphics
-/// (`createBusMarkerIconForRouteNumber`), just built as a SwiftUI `Shape`
-/// instead. Callers rotate the whole shape with `.rotationEffect` to point
-/// it at a bus's actual heading; the shape itself has no idea what
-/// direction that is.
-private struct TeardropShape: Shape {
-    /// Point radius and back-circle radius, both as a fraction of the
-    /// shape's own half-size.
-    var pointRadius: CGFloat = 1.0
-    var backRadius: CGFloat = 0.6
-
+/// A triangle pointing straight up within its own frame — the direction
+/// pointer's base shape before `BusPinView` offsets and rotates it.
+private struct Triangle: Shape {
     func path(in rect: CGRect) -> Path {
-        let center = CGPoint(x: rect.midX, y: rect.midY)
-        let scale = min(rect.width, rect.height) / 2
-        let r1 = pointRadius * scale
-        let r2 = backRadius * scale
-        guard r1 > 0, r2 > 0, r2 < r1 else {
-            return Circle().path(in: rect)
-        }
-
-        let tipAngle = -CGFloat.pi / 2 // "up" in this shape's own local space
-        let halfSpread = acos(r2 / r1)
-        let tangentAngle = tipAngle + halfSpread
-
-        func point(angle: CGFloat, radius: CGFloat) -> CGPoint {
-            CGPoint(x: center.x + radius * cos(angle), y: center.y + radius * sin(angle))
-        }
-
         var path = Path()
-        path.move(to: point(angle: tipAngle, radius: r1))
-        path.addLine(to: point(angle: tangentAngle, radius: r2))
-
-        // The back is the LONG way around the r2 circle (through the
-        // bottom, opposite the tip) — built as a short polyline rather
-        // than Path's own addArc, which has a well-known clockwise/
-        // counterclockwise ambiguity under SwiftUI's flipped (y-down)
-        // coordinate space. A plain loop of line segments sidesteps that
-        // question entirely instead of guessing at it.
-        let sweep = (2 * CGFloat.pi) - (2 * halfSpread)
-        let steps = 24
-        for step in 1...steps {
-            let t = CGFloat(step) / CGFloat(steps)
-            path.addLine(to: point(angle: tangentAngle + sweep * t, radius: r2))
-        }
-
+        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
         path.closeSubpath()
         return path
+    }
+}
+
+/// A partial ring, `fraction` (0...1) of the way around clockwise starting
+/// from the top — the occupancy indicator around a bus pin's circle.
+/// Built as a short manual polyline rather than `Path.addArc`, which has a
+/// well-known clockwise/counterclockwise ambiguity under SwiftUI's
+/// flipped (y-down) coordinate space — the same reasoning the old
+/// teardrop marker's back-arc used to use for the same reason.
+private struct OccupancyArc: Shape {
+    var fraction: Double
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        guard fraction > 0 else { return path }
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius = min(rect.width, rect.height) / 2
+        let startAngle = -CGFloat.pi / 2 // top
+        let sweep = 2 * CGFloat.pi * CGFloat(min(max(fraction, 0), 1))
+        let steps = max(2, Int(48 * fraction))
+        for step in 0...steps {
+            let t = CGFloat(step) / CGFloat(steps)
+            let angle = startAngle + sweep * t
+            let point = CGPoint(x: center.x + radius * cos(angle), y: center.y + radius * sin(angle))
+            if step == 0 {
+                path.move(to: point)
+            } else {
+                path.addLine(to: point)
+            }
+        }
+        return path
+    }
+}
+
+private extension Color {
+    /// 24-bit RGB, e.g. `Color(hex: 0x22C55E)` — the occupancy-arc colors
+    /// are specified as exact hex values rather than a built-in semantic
+    /// color (`.green`/`.yellow`/...) that could render slightly
+    /// differently from one iOS version to the next.
+    init(hex: UInt32) {
+        self.init(
+            red: Double((hex >> 16) & 0xFF) / 255,
+            green: Double((hex >> 8) & 0xFF) / 255,
+            blue: Double(hex & 0xFF) / 255
+        )
     }
 }
 
@@ -212,15 +330,29 @@ struct BusAnnotationView: View {
     let bearing: Double?
     let routeColor: Color
     let occupancyPercent: Int?
+    var mapHeading: Double = 0
     @State private var isPopoverPresented = false
 
     var body: some View {
-        BusPinView(isOffRoute: isOffRoute, bearing: bearing, routeColor: routeColor, occupancyPercent: occupancyPercent)
-            .onTapGesture { isPopoverPresented = true }
-            .popover(isPresented: $isPopoverPresented) {
-                BusInfoSheet(bus: bus)
-                    .presentationCompactAdaptation(.popover)
+        BusPinView(
+            isOffRoute: isOffRoute,
+            bearing: bearing,
+            routeColor: routeColor,
+            occupancyPercent: occupancyPercent,
+            mapHeading: mapHeading
+        )
+        .contentShape(Rectangle())
+        // `.highPriorityGesture` rather than a plain `.onTapGesture` —
+        // see the identical change on StationAnnotationView for why.
+        .highPriorityGesture(
+            TapGesture().onEnded {
+                isPopoverPresented = true
             }
+        )
+        .popover(isPresented: $isPopoverPresented) {
+            BusInfoSheet(bus: bus)
+                .presentationCompactAdaptation(.popover)
+        }
     }
 }
 
@@ -231,9 +363,11 @@ struct BusAnnotationView: View {
             StationPinView(isCurrent: true)
         }
         HStack(spacing: 16) {
-            BusPinView(isOffRoute: false, bearing: 45, routeColor: .red, occupancyPercent: nil)
-            BusPinView(isOffRoute: false, bearing: 120, routeColor: .red, occupancyPercent: 25)
-            BusPinView(isOffRoute: false, bearing: 200, routeColor: .blue, occupancyPercent: 90)
+            BusPinView(isOffRoute: false, bearing: 0, routeColor: .red, occupancyPercent: nil)
+            BusPinView(isOffRoute: false, bearing: 90, routeColor: .red, occupancyPercent: 20)
+            BusPinView(isOffRoute: false, bearing: 180, routeColor: .blue, occupancyPercent: 55)
+            BusPinView(isOffRoute: false, bearing: 270, routeColor: .purple, occupancyPercent: 80)
+            BusPinView(isOffRoute: false, bearing: 45, routeColor: .orange, occupancyPercent: 95)
             BusPinView(isOffRoute: true, bearing: nil, routeColor: .green, occupancyPercent: nil)
         }
     }

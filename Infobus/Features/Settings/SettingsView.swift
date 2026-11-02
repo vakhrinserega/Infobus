@@ -62,6 +62,18 @@ struct SettingsView: View {
                 }
             }
         }
+        // This is the ONE screen in the app that both sets its own static
+        // `.navigationTitle` AND is where the language picker itself
+        // lives, so it's always already on screen at the exact moment the
+        // language changes — and a UINavigationBar-bridged title, unlike
+        // ordinary body `Text`, doesn't reliably re-resolve its
+        // `LocalizedStringKey` purely from an environment change on an
+        // already-mounted NavigationStack. Keying the whole stack to the
+        // current language forces SwiftUI to tear it down and rebuild it
+        // (title included) the moment it changes, rather than leaving
+        // "Настройки" stuck in whatever language was active when this
+        // screen first appeared.
+        .id(settings.language)
     }
 
     // MARK: - Sections
@@ -162,10 +174,13 @@ struct SettingsView: View {
     }
 
     private var aboutSection: some View {
+        // The "Написать в поддержку" mailto link used to live here, back
+        // before there was any other way to reach support — now that's
+        // the "Обращения" section on the "Уведомления" tab, a real
+        // in-app flow with an actual reply shown back to the rider,
+        // which makes this mail link redundant (worse, really, since a
+        // mail client might not even be configured on the device).
         Section {
-            if let url = feedbackMailURL {
-                Link("Написать в поддержку", destination: url)
-            }
             HStack {
                 Text("Версия")
                 Spacer()
@@ -188,10 +203,6 @@ struct SettingsView: View {
     }
 
     // MARK: - Formatting
-
-    private var feedbackMailURL: URL? {
-        URL(string: "mailto:support@infobus.kz")
-    }
 
     private var appVersionString: String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"

@@ -78,11 +78,25 @@ struct MapView: View {
     /// working. This gives `zoom(by:)` the same kind of graceful fallback.
     @State private var lastKnownCenter: CLLocationCoordinate2D?
     @State private var isPickerPresented = false
+    /// While now is before this, `.onMapCameraChange` ignores its own
+    /// ticks. The zoom and locate-me buttons already know their exact
+    /// target distance/coordinate and write it to state immediately
+    /// themselves — so every mid-flight tick `.onMapCameraChange` fires
+    /// during that same 0.2–0.3s camera animation is a redundant write of
+    /// a value we already set. Each one still invalidates `mapContent`'s
+    /// body, forcing SwiftUI to rebuild the ENTIRE map content (every
+    /// polyline/station/bus across up to 5 routes) on every single frame
+    /// of the animation — that rebuild cost, repeated many times over
+    /// one button tap, is what actually made the zoom buttons feel
+    /// laggy, not the camera move itself. Pinch-to-zoom and manual
+    /// dragging are untouched by this — only our OWN programmatic moves
+    /// set this deadline.
+    @State private var suppressCameraChangeUntil: Date = .distantPast
 
     /// Station pins only render once the camera is closer than this (meters).
     /// Kept generous on purpose — stations should show up while still fairly
     /// zoomed out rather than only after zooming in a lot.
-    private let stationVisibleMaxDistance: Double = 8000
+    private let stationVisibleMaxDistance: Double = 10000
 
     /// Below this camera distance, station pins step up to their larger
     /// size — "close" zoom, as opposed to the "medium" zoom range between
@@ -227,7 +241,8 @@ struct MapView: View {
                                 isOffRoute: busPin.isOffRoute,
                                 bearing: busPin.bearing,
                                 routeColor: colorFor(track),
-                                occupancyPercent: busPin.bus.filling
+                                occupancyPercent: busPin.bus.filling,
+                                mapHeading: currentCamera?.heading ?? 0
                             )
                             .scaleEffect(busScale)
                             .zIndex(1)
@@ -242,6 +257,7 @@ struct MapView: View {
                 MapScaleView()
             }
             .onMapCameraChange(frequency: .continuous) { context in
+                guard Date() >= suppressCameraChangeUntil else { return }
                 cameraDistance = context.camera.distance
                 currentCamera = context.camera
             }
@@ -314,16 +330,25 @@ struct MapView: View {
         .padding(.trailing, 12)
     }
 
+    /// Deliberately NOT a `Button` — these sometimes didn't register a tap
+    /// at all, while pinch-zoom and MapKit's own native double-tap-to-zoom
+    /// on the map underneath always worked. That's the signature of this
+    /// button losing a gesture-recognizer race against the `Map`'s own
+    /// native pan/pinch/double-tap recognizers, which sit on the exact
+    /// same screen region underneath this overlay — a plain `Button`'s tap
+    /// gesture can occasionally lose that race and the touch gets consumed
+    /// by the map instead. `.highPriorityGesture` tells SwiftUI this
+    /// view's tap must win outright instead of competing for the touch.
     private func circularMapButton(systemImage: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Image(systemName: systemImage)
-                .font(.system(size: 16, weight: .semibold))
-                .frame(width: 40, height: 40)
-        }
-        .buttonStyle(.plain)
-        .foregroundStyle(.primary)
-        .background(.thinMaterial, in: Circle())
-        .shadow(radius: 1)
+        Image(systemName: systemImage)
+            .font(.system(size: 18, weight: .semibold))
+            .frame(width: 46, height: 46)
+            .foregroundStyle(.primary)
+            .background(.thinMaterial, in: Circle())
+            .shadow(radius: 1)
+            .contentShape(Circle())
+            .highPriorityGesture(TapGesture().onEnded(action))
+            .accessibilityAddTraits(.isButton)
     }
 
     /// Drives the zoom buttons off `cameraDistance` rather than
@@ -343,7 +368,9 @@ struct MapView: View {
     /// `centerOnUserLocation()` already used, which is exactly why that
     /// button kept working while these two didn't.
     private func zoom(by factor: Double) {
-        guard let center = currentCamera?.centerCoordinate ?? lastKnownCenter else { return }
+        guard let center = currentCamera?.centerCoordinate ?? lastKnownCenter else {
+            return
+        }
         let newDistance = min(max(cameraDistance * factor, 200), 200_000)
         let newCamera = MapCamera(
             centerCoordinate: center,
@@ -351,15 +378,24 @@ struct MapView: View {
             heading: currentCamera?.heading ?? 0,
             pitch: currentCamera?.pitch ?? 0
         )
+        // Mutes `.onMapCameraChange`'s own ticks for the duration of this
+        // move — see `suppressCameraChangeUntil`'s own comment for why
+        // those were the actual source of the lag, not the camera move
+        // itself.
+        suppressCameraChangeUntil = Date().addingTimeInterval(0.3)
         withAnimation(.easeInOut(duration: 0.2)) {
             cameraPosition = .camera(newCamera)
+            // Animated together with the camera now, instead of snapping
+            // the instant the button is tapped — `busScale`/`stationScale`
+            // read this, so their own `.scaleEffect` now eases in step
+            // with the camera instead of jumping ahead of it.
+            cameraDistance = newDistance
         }
         // Self-seed rather than waiting on `.onMapCameraChange` — so a
         // second rapid tap (or `centerOnUserLocation()` right after)
         // still has a fresh camera to work from even if that callback
         // is slow, or never comes, on this device.
         currentCamera = newCamera
-        cameraDistance = newDistance
         lastKnownCenter = center
     }
 
@@ -375,6 +411,7 @@ struct MapView: View {
             heading: currentCamera?.heading ?? 0,
             pitch: currentCamera?.pitch ?? 0
         )
+        suppressCameraChangeUntil = Date().addingTimeInterval(0.4)
         withAnimation(.easeInOut(duration: 0.3)) {
             cameraPosition = .camera(newCamera)
         }
@@ -415,7 +452,28 @@ struct MapView: View {
     private func observeTracks() {
         trackObservation = Publishers.MergeMany(tracks.map(\.objectWillChange))
             .receive(on: DispatchQueue.main)
-            .sink { _ in updateTick &+= 1 }
+            .sink { _ in
+                // Every live bus refresh (each selected route polls every
+                // 5s, independently) bumps `updateTick`, which forces
+                // THIS screen's body — and so `mapContent`'s entire
+                // polyline/station/bus tree, across every selected route
+                // — to rebuild. That's already expensive on its own; if
+                // one of these refreshes lands in the same moment as a
+                // zoom-button tap, the two expensive rebuilds can pile up
+                // on the same run loop turn, which was a plausible reason
+                // a tap sometimes seemed to do nothing at all — the app
+                // was simply still busy with the OTHER rebuild when that
+                // tap needed handling. Deferring a refresh that lands
+                // inside a zoom's own settle window lets the animation
+                // finish on its own first, instead of the two colliding.
+                if Date() < suppressCameraChangeUntil {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                        updateTick &+= 1
+                    }
+                } else {
+                    updateTick &+= 1
+                }
+            }
     }
 
     private func updateCameraToFitAllTracks() {

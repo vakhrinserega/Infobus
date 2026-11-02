@@ -45,7 +45,11 @@ struct CitySelectionView: View {
 
     private func retryRow(message: String, retry: @escaping () -> Void) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(message)
+            // `message` is a plain `String` from the view model —
+            // `Text(String)` never looks anything up in Localizable.xcstrings,
+            // so this stayed in Russian regardless of the in-app language
+            // despite the catalog already having a translated entry for it.
+            Text(LocalizedStringKey(message))
                 .foregroundStyle(.secondary)
             Button("Повторить", action: retry)
         }

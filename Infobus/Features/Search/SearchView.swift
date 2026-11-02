@@ -14,11 +14,31 @@
 //
 
 import SwiftUI
+import MapKit
+import CoreLocation
 
 struct SearchView: View {
     @EnvironmentObject private var cityStore: SelectedCityStore
     @StateObject private var viewModel = SearchViewModel()
     @State private var pickerTarget: MapPointTarget?
+    /// The selected city's own extent, so `MapPointPickerSheet` opens
+    /// centered on the right city instead of wherever `.automatic` lands.
+    /// Resolved eagerly here on city change so it's *usually* already on
+    /// hand the instant a picker sheet opens — but the sheet also resolves
+    /// this itself (via the same `CityRegion.fallback`) as a fallback for
+    /// when this hasn't finished yet, e.g. the user tapped "Откуда" right
+    /// after switching cities, before this had a chance to land. Nil just
+    /// means "not resolved yet (or unresolvable)" — never a dead end.
+    @State private var cityFallbackRegion: MKCoordinateRegion?
+    /// What `cityStore.selectionKey` was the last time the task below
+    /// actually ran its body — NOT just a copy of the id SwiftUI passes
+    /// in. `.task(id:)` re-runs its whole body every time this view
+    /// *reappears*, even when the id hasn't changed at all: switching to
+    /// another tab and back is exactly such a reappearance. Without this
+    /// guard, that alone called `viewModel.reset()` and wiped out an
+    /// in-progress search (points picked, results already shown) for no
+    /// reason other than having looked at a different tab for a moment.
+    @State private var lastHandledSelectionKey: String?
 
     var body: some View {
         NavigationStack {
@@ -26,12 +46,21 @@ struct SearchView: View {
                 .toolbar(.hidden, for: .navigationBar)
         }
         .task(id: cityStore.selectionKey) {
+            guard cityStore.selectionKey != lastHandledSelectionKey else { return }
+            lastHandledSelectionKey = cityStore.selectionKey
             viewModel.reset()
+            cityFallbackRegion = nil
+            if let city = cityStore.selectedCity, let country = cityStore.selectedCountry {
+                cityFallbackRegion = await CityRegion.fallback(for: city, in: country)
+            }
         }
         .sheet(item: $pickerTarget) { target in
             MapPointPickerSheet(
                 title: target.title,
-                initialCoordinate: target.isFrom ? viewModel.fromPoint?.coordinate : viewModel.toPoint?.coordinate
+                initialCoordinate: target.isFrom ? viewModel.fromPoint?.coordinate : viewModel.toPoint?.coordinate,
+                fallbackRegion: cityFallbackRegion,
+                city: cityStore.selectedCity,
+                country: cityStore.selectedCountry
             ) { coordinate, label in
                 let point = SearchPoint(coordinate: coordinate, label: label)
                 if target.isFrom {
@@ -164,12 +193,32 @@ struct SearchView: View {
                 // on the view model, `Text(String)` never localized it.
                 Text(LocalizedStringKey(message))
             }
-        case .loaded(let items):
-            if items.isEmpty {
+        case .loaded(let paths):
+            if paths.isEmpty {
                 ContentUnavailableView("Автобусом отсюда добраться не получилось найти", systemImage: "bus")
             } else {
-                List(items) { item in
-                    SearchResultRow(item: item)
+                List(paths) { path in
+                    // Wrapped in its own NavigationLink (rather than relying
+                    // on List's row-tap) so SearchResultRow stays a plain
+                    // display view, reusable without a nav context (e.g. in
+                    // its own #Preview).
+                    NavigationLink {
+                        if let city = cityStore.selectedCity, let country = cityStore.selectedCountry {
+                            SearchResultMapView(
+                                path: path,
+                                fromCoordinate: viewModel.fromPoint?.coordinate,
+                                toCoordinate: viewModel.toPoint?.coordinate,
+                                city: city,
+                                country: country
+                            )
+                        }
+                    } label: {
+                        SearchResultRow(
+                            path: path,
+                            fromCoordinate: viewModel.fromPoint?.coordinate,
+                            toCoordinate: viewModel.toPoint?.coordinate
+                        )
+                    }
                 }
                 .listStyle(.plain)
             }
@@ -192,34 +241,100 @@ private enum MapPointTarget: Identifiable {
     }
 }
 
+/// One row = one complete way to get there. A direct path renders as a
+/// single leg; a path with a transfer chains each leg's route/stops block
+/// with a "Пересадка" marker between them, matching how the old
+/// Objective-C app's `processSearchResults:` used to chain multi-leg paths —
+/// just inline in the row instead of a separate page per path.
 private struct SearchResultRow: View {
-    let item: SearchResultItem
+    let path: SearchPath
+    /// The rider's own picked points for this search (not the stop
+    /// coordinates) — used to show how far they'd have to walk to/from the
+    /// stops this route actually serves, since `pathsbwpoints` only ever
+    /// snaps to a *nearby* stop, not the exact point tapped.
+    let fromCoordinate: CLLocationCoordinate2D?
+    let toCoordinate: CLLocationCoordinate2D?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
+            if let fromCoordinate, let firstLeg = path.legs.first {
+                walkRow(
+                    prefix: "Пешком до остановки",
+                    meters: RouteGeometry.distance(fromCoordinate, firstLeg.departureStop.coordinate)
+                )
+            }
+
+            ForEach(Array(path.legs.enumerated()), id: \.offset) { index, leg in
+                if index > 0 {
+                    Label {
+                        Text("Пересадка на «\(leg.departureStop.name)»")
+                    } icon: {
+                        Image(systemName: "arrow.triangle.swap")
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                }
+                legRow(leg)
+            }
+
+            if let toCoordinate, let lastLeg = path.legs.last {
+                walkRow(
+                    prefix: "Пешком от остановки",
+                    meters: RouteGeometry.distance(lastLeg.arrivalStop.coordinate, toCoordinate)
+                )
+            }
+        }
+        .padding(.vertical, 4)
+    }
+
+    private func legRow(_ leg: SearchResultItem) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 8) {
-                Text(item.route.number)
+                Text(leg.route.number)
                     .font(.headline)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
                     .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 6))
-                Text(item.route.name)
+                Text(leg.route.name)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }
             HStack(spacing: 6) {
-                Text(item.departureStop.name)
+                Text(leg.departureStop.name)
                 Image(systemName: "arrow.right")
                     .foregroundStyle(.secondary)
-                Text(item.arrivalStop.name)
+                Text(leg.arrivalStop.name)
             }
             .font(.subheadline)
-            Text("\(item.numStops) ост.")
+            Text("\(leg.numStops) ост.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
-        .padding(.vertical, 4)
+    }
+
+    private func walkRow(prefix: LocalizedStringKey, meters: Double) -> some View {
+        HStack(spacing: 4) {
+            Image(systemName: "figure.walk")
+                .font(.caption2)
+            // `prefix` used to be a plain `String` — the two call sites
+            // below passed literal Russian text straight in, which
+            // *looked* harmless (string interpolation makes `Text(...)`
+            // resolve either way) but actually meant Xcode's String
+            // Catalog extraction never saw "Пешком до/от остановки" as a
+            // localizable key at all, so it stayed Russian regardless of
+            // the in-app language. `LocalizedStringKey` fixes that at the
+            // type level; concatenating `Text` values (rather than
+            // interpolating `prefix` into one shared string) keeps each
+            // piece's own localization independent and unambiguous.
+            Text(prefix) + Text(" — ") + Text(formattedDistance(meters))
+        }
+        .font(.caption)
+        .foregroundStyle(.secondary)
+    }
+
+    private func formattedDistance(_ meters: Double) -> String {
+        meters >= 1000 ? String(format: "%.1f км", meters / 1000) : "\(Int(meters.rounded())) м"
     }
 }
 

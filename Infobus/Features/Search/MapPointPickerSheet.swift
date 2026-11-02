@@ -19,6 +19,22 @@ import MapKit
 struct MapPointPickerSheet: View {
     let title: String
     let initialCoordinate: CLLocationCoordinate2D?
+    /// Where to center the map when there's no `initialCoordinate` yet (a
+    /// first pick for this target) — the selected city's own extent, so the
+    /// sheet opens already looking at the right city instead of wherever
+    /// `.automatic` (device location, or Apple's generic default) happens to
+    /// land. Still just a fallback: a previous pick always wins, and with
+    /// neither one the sheet falls back to `.automatic` same as before.
+    let fallbackRegion: MKCoordinateRegion?
+    /// The selected city/country — used only to resolve a fallback region
+    /// *ourselves*, in `.task` below, if `fallbackRegion` wasn't ready yet
+    /// when this sheet was created (the caller started resolving it async;
+    /// opening this sheet doesn't wait on that). Without this, a user who
+    /// taps "Откуда" quickly after switching cities would land on whatever
+    /// `.automatic` shows — the whole country, in practice — with nothing
+    /// to ever correct it, since `fallbackRegion` is only read once, in init.
+    let city: City?
+    let country: Country?
     let onPick: (CLLocationCoordinate2D, String) -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -28,14 +44,24 @@ struct MapPointPickerSheet: View {
     @State private var addressLabel: String?
     @State private var isResolvingAddress = false
 
-    init(title: String, initialCoordinate: CLLocationCoordinate2D?, onPick: @escaping (CLLocationCoordinate2D, String) -> Void) {
+    init(
+        title: String,
+        initialCoordinate: CLLocationCoordinate2D?,
+        fallbackRegion: MKCoordinateRegion? = nil,
+        city: City? = nil,
+        country: Country? = nil,
+        onPick: @escaping (CLLocationCoordinate2D, String) -> Void
+    ) {
         self.title = title
         self.initialCoordinate = initialCoordinate
+        self.fallbackRegion = fallbackRegion
+        self.city = city
+        self.country = country
         self.onPick = onPick
         _pickedCoordinate = State(initialValue: initialCoordinate)
         _cameraPosition = State(initialValue: initialCoordinate.map {
             .region(MKCoordinateRegion(center: $0, latitudinalMeters: 1200, longitudinalMeters: 1200))
-        } ?? .automatic)
+        } ?? fallbackRegion.map { .region($0) } ?? .automatic)
     }
 
     var body: some View {
@@ -89,6 +115,21 @@ struct MapPointPickerSheet: View {
             .onDisappear {
                 locationProvider.stop()
             }
+            .task {
+                // Only worth doing if we opened without anywhere good to
+                // point the camera yet: a previous pick, or the caller's
+                // own fallback, both already win in `init` above.
+                guard initialCoordinate == nil, fallbackRegion == nil else { return }
+                guard let city, let country else { return }
+                guard let region = await CityRegion.fallback(for: city, in: country) else { return }
+                // The user may have already tapped the map (or hit "Моё
+                // местоположение") while this was resolving — don't yank
+                // the camera away from a point they already picked.
+                guard pickedCoordinate == nil else { return }
+                withAnimation {
+                    cameraPosition = .region(region)
+                }
+            }
         }
     }
 
@@ -107,7 +148,15 @@ struct MapPointPickerSheet: View {
                 ProgressView()
                     .frame(maxWidth: .infinity, alignment: .leading)
             } else if let addressLabel {
-                Text(addressLabel)
+                // `addressLabel` is sometimes the fixed "Моё местоположение"
+                // (a catalog key) and sometimes a real reverse-geocoded
+                // address or raw coordinate fallback (dynamic, never in the
+                // catalog) — `Text(String)` skipped the catalog lookup
+                // entirely, so the fixed case stayed in Russian regardless
+                // of the in-app language. `LocalizedStringKey` fixes that
+                // case and leaves the dynamic ones displaying unchanged,
+                // same as elsewhere this pattern shows up.
+                Text(LocalizedStringKey(addressLabel))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)

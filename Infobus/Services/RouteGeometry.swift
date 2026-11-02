@@ -147,6 +147,42 @@ enum RouteGeometry {
         return MKCoordinateRegion(center: center, span: span)
     }
 
+    /// The stretch of `polyline` between two fractions (as returned by
+    /// `project(_:onto:)`), including the exact boarding/alighting points —
+    /// used to highlight just the bit of a route a rider actually rides,
+    /// rather than drawing the whole line. `startFraction` may be larger
+    /// than `endFraction` (the stop order runs the opposite way along this
+    /// particular polyline, e.g. a route driven in a loop) — the result is
+    /// walked backward in that case rather than coming out reversed.
+    static func trim(
+        _ polyline: [CLLocationCoordinate2D],
+        from startFraction: Double,
+        to endFraction: Double
+    ) -> [CLLocationCoordinate2D] {
+        guard polyline.count >= 2 else { return polyline }
+        let forward = startFraction <= endFraction
+        let lower = min(startFraction, endFraction)
+        let upper = max(startFraction, endFraction)
+
+        let cumulativeLength = cumulativeLengths(of: polyline)
+        let totalLength = cumulativeLength.last ?? 0
+        guard totalLength > 0,
+              let start = coordinate(atFraction: lower, along: polyline),
+              let end = coordinate(atFraction: upper, along: polyline) else {
+            return polyline
+        }
+
+        let lowerLength = lower * totalLength
+        let upperLength = upper * totalLength
+        var result: [CLLocationCoordinate2D] = [start]
+        for i in 0..<polyline.count where cumulativeLength[i] > lowerLength && cumulativeLength[i] < upperLength {
+            result.append(polyline[i])
+        }
+        result.append(end)
+
+        return forward ? result : result.reversed()
+    }
+
     private static func cumulativeLengths(of polyline: [CLLocationCoordinate2D]) -> [Double] {
         var lengths: [Double] = [0]
         for i in 1..<polyline.count {

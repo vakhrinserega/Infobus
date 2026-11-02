@@ -27,11 +27,18 @@ struct RouteDetailView: View {
     /// MapView.swift for why this exists (the same hard `guard let
     /// currentCamera` bug was here too, just not the one reported).
     @State private var lastKnownCenter: CLLocationCoordinate2D?
+    /// See the identical property in MapView.swift — mutes
+    /// `.onMapCameraChange`'s own mid-flight ticks during a zoom-button
+    /// animation, since those were forcing this whole map's content
+    /// (line, stations, buses) to rebuild on every frame of the move and
+    /// that rebuild cost was the actual source of the zoom buttons
+    /// feeling laggy here too.
+    @State private var suppressCameraChangeUntil: Date = .distantPast
 
     /// Station pins only render once the camera is closer than this (meters).
     /// Kept generous on purpose — stations should show up while still fairly
     /// zoomed out rather than only after zooming in a lot.
-    private let stationVisibleMaxDistance: Double = 8000
+    private let stationVisibleMaxDistance: Double = 10000
 
     /// Below this camera distance, station pins step up to their larger
     /// size — "close" zoom, as opposed to the "medium" zoom range between
@@ -140,7 +147,8 @@ struct RouteDetailView: View {
                         isOffRoute: busPin.isOffRoute,
                         bearing: busPin.bearing,
                         routeColor: .accentColor,
-                        occupancyPercent: busPin.bus.filling
+                        occupancyPercent: busPin.bus.filling,
+                        mapHeading: currentCamera?.heading ?? 0
                     )
                     .scaleEffect(busScale)
                     .zIndex(1)
@@ -155,6 +163,7 @@ struct RouteDetailView: View {
             MapUserLocationButton()
         }
         .onMapCameraChange(frequency: .continuous) { context in
+            guard Date() >= suppressCameraChangeUntil else { return }
             cameraDistance = context.camera.distance
             currentCamera = context.camera
         }
@@ -186,31 +195,36 @@ struct RouteDetailView: View {
     /// scale, and the user-location button.
     private var zoomControls: some View {
         VStack(spacing: 0) {
-            Button {
-                zoom(by: 0.5)
-            } label: {
-                Image(systemName: "plus")
-                    .font(.system(size: 16, weight: .semibold))
-                    .frame(width: 36, height: 36)
-            }
-            Divider().frame(width: 24)
-            Button {
-                zoom(by: 2)
-            } label: {
-                Image(systemName: "minus")
-                    .font(.system(size: 16, weight: .semibold))
-                    .frame(width: 36, height: 36)
-            }
+            zoomButton(systemImage: "plus") { zoom(by: 0.5) }
+            Divider().frame(width: 28)
+            zoomButton(systemImage: "minus") { zoom(by: 2) }
         }
-        .buttonStyle(.plain)
         .foregroundStyle(.primary)
         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 10))
         .padding(.trailing, 12)
         .padding(.bottom, 24)
     }
 
+    /// Deliberately NOT a `Button` — see the identical helper in
+    /// MapView.swift for why: taps on these sometimes didn't register at
+    /// all, while pinch-zoom and MapKit's own native double-tap-to-zoom on
+    /// the map underneath always worked — a plain `Button` here can lose
+    /// that gesture-recognizer race against the `Map`'s own native
+    /// recognizers occupying the same screen region.
+    /// `.highPriorityGesture` makes this view's tap win outright instead.
+    private func zoomButton(systemImage: String, action: @escaping () -> Void) -> some View {
+        Image(systemName: systemImage)
+            .font(.system(size: 18, weight: .semibold))
+            .frame(width: 42, height: 42)
+            .contentShape(Rectangle())
+            .highPriorityGesture(TapGesture().onEnded(action))
+            .accessibilityAddTraits(.isButton)
+    }
+
     private func zoom(by factor: Double) {
-        guard let center = currentCamera?.centerCoordinate ?? lastKnownCenter else { return }
+        guard let center = currentCamera?.centerCoordinate ?? lastKnownCenter else {
+            return
+        }
         let newDistance = min(max(cameraDistance * factor, 200), 200_000)
         let newCamera = MapCamera(
             centerCoordinate: center,
@@ -218,11 +232,18 @@ struct RouteDetailView: View {
             heading: currentCamera?.heading ?? 0,
             pitch: currentCamera?.pitch ?? 0
         )
+        // Mutes `.onMapCameraChange`'s own ticks for the duration of this
+        // move — see `suppressCameraChangeUntil`'s own comment for why.
+        suppressCameraChangeUntil = Date().addingTimeInterval(0.3)
         withAnimation(.easeInOut(duration: 0.2)) {
             cameraPosition = .camera(newCamera)
+            // Animated together with the camera now instead of snapping
+            // the instant the button is tapped — `busScale`/`stationScale`
+            // read this, so their own `.scaleEffect` eases in step with
+            // the camera instead of jumping ahead of it.
+            cameraDistance = newDistance
         }
         currentCamera = newCamera
-        cameraDistance = newDistance
         lastKnownCenter = center
     }
 }

@@ -16,11 +16,28 @@
 import Foundation
 import CoreLocation
 
+/// Shape of a rejected request from the Apps Script appeals backend —
+/// its own `jsonOutput_` always answers with HTTP 200, so this is the
+/// only way to tell a rejection (bad input, anti-spam rate limit) apart
+/// from a real `Appeal`/`[Appeal]`. `message` is already a ready-to-show
+/// Russian sentence when the server sends one; `error` is just the
+/// machine-readable fallback.
+private struct AppealServerError: Decodable {
+    let error: String
+    let message: String?
+}
+
 actor InfobusAPIClient {
     static let shared = InfobusAPIClient()
 
     private let session: URLSession
     private let decoder: JSONDecoder
+    /// Separate from `decoder` on purpose — the Apps Script appeals
+    /// backend (see Appeal.swift) returns ISO-8601 date strings, and
+    /// nothing else this client decodes uses `Date` at all, so this stays
+    /// scoped to just those calls rather than changing `decoder`'s
+    /// behavior for every other model.
+    private let appealsDecoder: JSONDecoder
     private let masterBaseURL = URL(string: "https://infobus.kz/api")!
 
     /// Unreserved characters only (RFC 3986) — safe to embed unescaped in an
@@ -34,6 +51,26 @@ actor InfobusAPIClient {
     init(session: URLSession = .shared) {
         self.session = session
         self.decoder = JSONDecoder()
+        let appealsDecoder = JSONDecoder()
+        // Plain `.iso8601` rejects the exact strings the Apps Script side
+        // is expected to send: JavaScript's `Date.toISOString()` always
+        // includes milliseconds ("...T12:00:00.000Z"), but Foundation's
+        // built-in ISO-8601 strategy does not parse that fractional part
+        // by default — every appeal would fail to decode. Try the
+        // fractional-seconds formatter first, fall back to the plain one
+        // in case the script ever sends a timestamp without it.
+        let fractionalFormatter = ISO8601DateFormatter()
+        fractionalFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        let plainFormatter = ISO8601DateFormatter()
+        appealsDecoder.dateDecodingStrategy = .custom { decoder in
+            let container = try decoder.singleValueContainer()
+            let string = try container.decode(String.self)
+            if let date = fractionalFormatter.date(from: string) ?? plainFormatter.date(from: string) {
+                return date
+            }
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Unrecognized ISO-8601 date: \(string)")
+        }
+        self.appealsDecoder = appealsDecoder
     }
 
     // MARK: - Master directory
@@ -78,7 +115,7 @@ actor InfobusAPIClient {
         return try await get(base.appendingPathComponent("cities/\(city.id)/stations/\(stationId)/prediction"))
     }
 
-    func search(city: City, from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) async throws -> [SearchResultItem] {
+    func search(city: City, from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) async throws -> [SearchPath] {
         let base = try serviceBaseURL(for: city)
         guard var components = URLComponents(url: base.appendingPathComponent("cities/\(city.id)/pathsbwpoints"), resolvingAgainstBaseURL: false) else {
             throw InfobusAPIError.invalidURL
@@ -90,7 +127,51 @@ actor InfobusAPIClient {
             URLQueryItem(name: "targetLng", value: String(format: "%.6f", to.longitude))
         ]
         guard let url = components.url else { throw InfobusAPIError.invalidURL }
-        return try await get(url)
+        // The response is an array of paths, each itself an array of 1+
+        // legs (a transfer) — see SearchResultItem.swift's header for how
+        // this was confirmed. Decode that real shape directly, then wrap
+        // each inner array as a `SearchPath`.
+        let pathsOfLegs: [[SearchResultItem]] = try await get(url)
+        return pathsOfLegs.map(SearchPath.init)
+    }
+
+    // MARK: - Appeals (support requests)
+
+    /// `endpoint` is `CityInfo.appealsEndpoint` — the per-city Apps Script
+    /// Web App URL, a different host entirely from `city.serviceURL` —
+    /// so these two calls build their request directly from it rather
+    /// than going through `serviceBaseURL(for:)`.
+    func createAppeal(endpoint: String, deviceId: String, cityId: Int, message: String, category: String?) async throws -> Appeal {
+        guard let url = URL(string: endpoint) else { throw InfobusAPIError.invalidURL }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        var payload: [String: Any] = [
+            "action": "create",
+            "deviceId": deviceId,
+            "cityId": cityId,
+            "message": message
+        ]
+        if let category { payload["category"] = category }
+        request.httpBody = try JSONSerialization.data(withJSONObject: payload)
+        return try await sendAppeal(request)
+    }
+
+    /// Every appeal this device has ever submitted for this city — the
+    /// Apps Script side is expected to already be scoping/expiring these
+    /// itself (the 30-day retention discussed alongside the Telegram
+    /// integration), not something this client filters again.
+    func fetchAppeals(endpoint: String, deviceId: String, cityId: Int) async throws -> [Appeal] {
+        guard var components = URLComponents(string: endpoint) else { throw InfobusAPIError.invalidURL }
+        var queryItems = components.queryItems ?? []
+        queryItems.append(contentsOf: [
+            URLQueryItem(name: "action", value: "list"),
+            URLQueryItem(name: "deviceId", value: deviceId),
+            URLQueryItem(name: "cityId", value: String(cityId))
+        ])
+        components.queryItems = queryItems
+        guard let url = components.url else { throw InfobusAPIError.invalidURL }
+        return try await sendAppeal(URLRequest(url: url))
     }
 
     /// Fire-and-forget usage beacon the old app sent when a user picked a route. Best-effort:
@@ -111,22 +192,55 @@ actor InfobusAPIClient {
         return url
     }
 
-    private func get<T: Decodable>(_ url: URL) async throws -> T {
-        let (data, response) = try await performRequest(url)
+    private func get<T: Decodable>(_ url: URL, decoder customDecoder: JSONDecoder? = nil) async throws -> T {
+        try await send(URLRequest(url: url), decoder: customDecoder)
+    }
+
+    /// Shared by every GET (via the `get` overload above) and every POST
+    /// (appeals' `createAppeal`) — validates the HTTP status, then
+    /// decodes with whichever decoder the caller needs (`decoder` by
+    /// default; `appealsDecoder` for anything with ISO-8601 dates).
+    private func send<T: Decodable>(_ request: URLRequest, decoder customDecoder: JSONDecoder? = nil) async throws -> T {
+        let (data, response) = try await performRequest(request)
         guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
             let code = (response as? HTTPURLResponse)?.statusCode ?? -1
             throw InfobusAPIError.serverError(statusCode: code)
         }
         do {
-            return try decoder.decode(T.self, from: data)
+            return try (customDecoder ?? decoder).decode(T.self, from: data)
         } catch {
             throw InfobusAPIError.decodingFailed(underlying: error)
         }
     }
 
-    private func performRequest(_ url: URL) async throws -> (Data, URLResponse) {
+    /// Shared by `createAppeal`/`fetchAppeals` — same status-code check as
+    /// `send`, but checked for an `{"error": ..., "message": ...}` body
+    /// FIRST. The Apps Script backend can't set a real HTTP status code
+    /// at all (see its own `jsonOutput_` comment), so a rejected request
+    /// — bad input, or this device over the anti-spam rate limit — still
+    /// comes back as a plain 200 with that shape instead of an
+    /// `Appeal`/`[Appeal]`. Checking for it before the real decode turns
+    /// what would otherwise be a generic "Неверный формат ответа
+    /// сервера" into the actual, useful reason from the server.
+    private func sendAppeal<T: Decodable>(_ request: URLRequest) async throws -> T {
+        let (data, response) = try await performRequest(request)
+        guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+            let code = (response as? HTTPURLResponse)?.statusCode ?? -1
+            throw InfobusAPIError.serverError(statusCode: code)
+        }
+        if let serverError = try? appealsDecoder.decode(AppealServerError.self, from: data) {
+            throw InfobusAPIError.appealRejected(message: serverError.message ?? serverError.error)
+        }
         do {
-            return try await session.data(from: url)
+            return try appealsDecoder.decode(T.self, from: data)
+        } catch {
+            throw InfobusAPIError.decodingFailed(underlying: error)
+        }
+    }
+
+    private func performRequest(_ request: URLRequest) async throws -> (Data, URLResponse) {
+        do {
+            return try await session.data(for: request)
         } catch {
             throw InfobusAPIError.network(underlying: error)
         }

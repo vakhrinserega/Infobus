@@ -61,7 +61,9 @@ struct CityListView: View {
 
     private func retryRow(message: String, retry: @escaping () -> Void) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(message)
+            // Same fix as CitySelectionView's identical helper — `Text(String)`
+            // never looks `message` up in Localizable.xcstrings.
+            Text(LocalizedStringKey(message))
                 .foregroundStyle(.secondary)
             Button("Повторить", action: retry)
         }
